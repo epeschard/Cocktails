@@ -9,11 +9,13 @@
 /* Begin PBXBuildFile section */
 		FE3882732ABF03C2003960B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3882722ABF03C2003960B7 /* AppDelegate.swift */; };
 		FE3882752ABF03C2003960B7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3882742ABF03C2003960B7 /* SceneDelegate.swift */; };
-		FE3882772ABF03C2003960B7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3882762ABF03C2003960B7 /* ViewController.swift */; };
 		FE38827C2ABF03C3003960B7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE38827B2ABF03C3003960B7 /* Assets.xcassets */; };
 		FE38827F2ABF03C3003960B7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE38827D2ABF03C3003960B7 /* LaunchScreen.storyboard */; };
 		FE38828A2ABF03C3003960B7 /* CocktailsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3882892ABF03C3003960B7 /* CocktailsTests.swift */; };
 		FE3882A42AC0199F003960B7 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = FE3882A32AC0199F003960B7 /* ComposableArchitecture */; };
+		FE3882A82AC15EEF003960B7 /* Feature.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3882A72AC15EEF003960B7 /* Feature.swift */; };
+		FE3ABBAF2AC1734F007EA904 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3882A92AC16389003960B7 /* ViewController.swift */; };
+		FE3ABBB42AC186FA007EA904 /* Drink.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3ABBB32AC186FA007EA904 /* Drink.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,12 +32,14 @@
 		FE38826F2ABF03C2003960B7 /* Cocktails.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cocktails.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE3882722ABF03C2003960B7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FE3882742ABF03C2003960B7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		FE3882762ABF03C2003960B7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		FE38827B2ABF03C3003960B7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FE38827E2ABF03C3003960B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FE3882802ABF03C3003960B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FE3882852ABF03C3003960B7 /* CocktailsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CocktailsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE3882892ABF03C3003960B7 /* CocktailsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocktailsTests.swift; sourceTree = "<group>"; };
+		FE3882A72AC15EEF003960B7 /* Feature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feature.swift; sourceTree = "<group>"; };
+		FE3882A92AC16389003960B7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		FE3ABBB32AC186FA007EA904 /* Drink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drink.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,9 +82,10 @@
 		FE3882712ABF03C2003960B7 /* Cocktails */ = {
 			isa = PBXGroup;
 			children = (
+				FE3ABBB02AC1751D007EA904 /* Api */,
+				FE3882A52AC15EAF003960B7 /* Search */,
 				FE3882722ABF03C2003960B7 /* AppDelegate.swift */,
 				FE3882742ABF03C2003960B7 /* SceneDelegate.swift */,
-				FE3882762ABF03C2003960B7 /* ViewController.swift */,
 				FE38827B2ABF03C3003960B7 /* Assets.xcassets */,
 				FE38827D2ABF03C3003960B7 /* LaunchScreen.storyboard */,
 				FE3882802ABF03C3003960B7 /* Info.plist */,
@@ -94,6 +99,23 @@
 				FE3882892ABF03C3003960B7 /* CocktailsTests.swift */,
 			);
 			path = CocktailsTests;
+			sourceTree = "<group>";
+		};
+		FE3882A52AC15EAF003960B7 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				FE3882A72AC15EEF003960B7 /* Feature.swift */,
+				FE3882A92AC16389003960B7 /* ViewController.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		FE3ABBB02AC1751D007EA904 /* Api */ = {
+			isa = PBXGroup;
+			children = (
+				FE3ABBB32AC186FA007EA904 /* Drink.swift */,
+			);
+			path = Api;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,9 +224,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FE3882772ABF03C2003960B7 /* ViewController.swift in Sources */,
+				FE3ABBAF2AC1734F007EA904 /* ViewController.swift in Sources */,
 				FE3882732ABF03C2003960B7 /* AppDelegate.swift in Sources */,
 				FE3882752ABF03C2003960B7 /* SceneDelegate.swift in Sources */,
+				FE3ABBB42AC186FA007EA904 /* Drink.swift in Sources */,
+				FE3882A82AC15EEF003960B7 /* Feature.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

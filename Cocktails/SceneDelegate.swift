@@ -1,3 +1,4 @@
+import ComposableArchitecture
 import UIKit
 
 class SceneDelegate: UIResponder {
@@ -13,14 +14,40 @@ extension SceneDelegate: UIWindowSceneDelegate {
     willConnectTo session: UISceneSession,
     options connectionOptions: UIScene.ConnectionOptions
   ) {
-    // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-    // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-    // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
     guard
         let windowScene = (scene as? UIWindowScene)
     else { return }
     window = UIWindow(windowScene: windowScene)
-    window?.rootViewController = ViewController()
+    let searchViewController = SearchViewController(
+      store: Store(initialState: SearchFeature.State()) {
+        SearchFeature(
+          fetchDrinks: { query in
+            var components = URLComponents()
+            components.scheme = "https"
+            components.host = "thecocktaildb.com"
+            components.path = "/api/json/v1/1/search.php"
+            components.queryItems = [
+              URLQueryItem(name: "s", value: query)
+            ]
+            do {
+              let (data, _) = try await URLSession.shared
+                .data(
+                  from: components.url!
+                )
+            
+              let decodedResponse = try JSONDecoder().decode(
+                CocktailResponse.self,
+                from: data
+              )
+              return Result.success(decodedResponse.drinks)
+            } catch {
+              return Result.failure(error as NSError)
+            }
+          }
+        )
+      }
+    )
+    window?.rootViewController = searchViewController
     window?.makeKeyAndVisible()
   }
 }
