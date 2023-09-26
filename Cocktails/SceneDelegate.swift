@@ -19,7 +19,9 @@ extension SceneDelegate: UIWindowSceneDelegate {
     else { return }
     window = UIWindow(windowScene: windowScene)
     let searchViewController = SearchViewController(
-      store: Store(initialState: SearchFeature.State()) {
+      store: Store(
+        initialState: SearchFeature.State()
+      ) {
         SearchFeature(
           fetchDrinks: { query in
             var components = URLComponents()
@@ -39,9 +41,9 @@ extension SceneDelegate: UIWindowSceneDelegate {
                 CocktailResponse.self,
                 from: data
               )
-              return Result.success(decodedResponse.drinks)
+              return decodedResponse.drinks
             } catch {
-              return Result.failure(error as NSError)
+              throw error
             }
           }
         )

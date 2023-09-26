@@ -7,38 +7,39 @@ struct SearchFeature: Reducer {
     var query: String = "margarita"
     var drinks: [Drink] = []
     var isLoading: Bool = false
-    var error: String? = nil
+    var errorText: String? = nil
   }
   
   enum Action: Equatable {
     case loadDrinks
-    case drinksLoaded(Result<[Drink], NSError>)
+    case loadedDrinks(TaskResult<[Drink]>)
   }
   
-  let fetchDrinks: (String) async throws -> Result<[Drink], NSError>
+  let fetchDrinks: @Sendable (String) async throws -> [Drink]
   
   func reduce(
     into state: inout State,
     action: Action
   ) -> Effect<Action> {
+    struct SomeError: Error {}
     switch action {
     case .loadDrinks:
       state.isLoading = true
       return .run { [query = state.query] send in
         let drinks = try await fetchDrinks(query)
         await send(
-          .drinksLoaded(drinks)
+          .loadedDrinks(.success(drinks))
         )
       }
       
-    case .drinksLoaded(.success(let cocktails)):
+    case .loadedDrinks(.success(let cocktails)):
       state.isLoading = false
       state.drinks = cocktails
       return .none
       
-    case .drinksLoaded(.failure(let error)):
+    case .loadedDrinks(.failure(let error)):
       state.isLoading = false
-      state.error = error.localizedDescription
+      state.errorText = error.localizedDescription
       return .none
     }
   }

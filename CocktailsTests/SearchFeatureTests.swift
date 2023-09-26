@@ -6,51 +6,53 @@ import XCTest
 final class SearchFeatureTests: XCTestCase {
 
   @MainActor
-  func testSearchFeatureLoadDrinksSucceeds() async throws {
+  func testLoadDrinks_Success() async throws {
     let store = TestStore(
       initialState: SearchFeature.State()
     ) {
       SearchFeature(
-        fetchDrinks: { query in
-          return Result.success([
-            Drink(idDrink: "1", strDrink: "Drink 1", strInstructions: "Instructions 1"),
-            Drink(idDrink: "2", strDrink: "Drink 2", strInstructions: "Instructions 2"),
-          ])
+        fetchDrinks: {
+          [
+            Drink(idDrink: "1", strDrink: "\($0) 1", strInstructions: "Instructions 1"),
+            Drink(idDrink: "2", strDrink: "\($0) 2", strInstructions: "Instructions 2"),
+          ]
         }
       )
     }
+    
     await store.send(.loadDrinks) {
       $0.isLoading = true
     }
     
     await store.receive(
-      .drinksLoaded(
-        Result.success([
-          Drink(idDrink: "1", strDrink: "Drink 1", strInstructions: "Instructions 1"),
-          Drink(idDrink: "2", strDrink: "Drink 2", strInstructions: "Instructions 2"),
+      .loadedDrinks(
+        .success([
+          Drink(idDrink: "1", strDrink: "margarita 1", strInstructions: "Instructions 1"),
+          Drink(idDrink: "2", strDrink: "margarita 2", strInstructions: "Instructions 2"),
         ])
       )
     ) {
       $0.isLoading = false
       $0.drinks = [
-        Drink(idDrink: "1", strDrink: "Drink 1", strInstructions: "Instructions 1"),
-        Drink(idDrink: "2", strDrink: "Drink 2", strInstructions: "Instructions 2"),
+        Drink(idDrink: "1", strDrink: "margarita 1", strInstructions: "Instructions 1"),
+        Drink(idDrink: "2", strDrink: "margarita 2", strInstructions: "Instructions 2"),
       ]
     }
   }
   
   @MainActor
-  func testSearchFeatureLoadDrinksFails() async throws {
-    let error = NSError(domain: "cocktails", code: 1/*, userInfo: ["": ""]*/)
+  func testLoadDrinks_Failure() async throws {
     let store = TestStore(
       initialState: SearchFeature.State()
     ) {
       SearchFeature(
-        fetchDrinks: { query in
-          return Result.failure(error)
+        fetchDrinks: { _ in
+          struct SomeError: Error {}
+          throw SomeError()
         }
       )
     }
+    XCTExpectFailure()
     await store.send(.loadDrinks) {
       $0.isLoading = true
     }
