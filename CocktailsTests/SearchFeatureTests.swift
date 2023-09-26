@@ -10,14 +10,14 @@ final class SearchFeatureTests: XCTestCase {
     let store = TestStore(
       initialState: SearchFeature.State()
     ) {
-      SearchFeature(
-        fetchDrinks: {
-          [
-            Drink(idDrink: "1", strDrink: "\($0) 1", strInstructions: "Instructions 1"),
-            Drink(idDrink: "2", strDrink: "\($0) 2", strInstructions: "Instructions 2"),
-          ]
-        }
-      )
+      SearchFeature()
+    } withDependencies: {
+      $0.theCocktailDb.fetchDrinks = {
+        [
+          Drink(idDrink: "1", strDrink: "\($0) 1", strInstructions: "Instructions 1"),
+          Drink(idDrink: "2", strDrink: "\($0) 2", strInstructions: "Instructions 2"),
+        ]
+      }
     }
     
     await store.send(.loadDrinks) {
@@ -41,30 +41,80 @@ final class SearchFeatureTests: XCTestCase {
   }
   
   @MainActor
-  func testLoadDrinks_Failure() async throws {
+  func testLoadDrinks_InvalidUrl_Failure() async throws {
     let store = TestStore(
       initialState: SearchFeature.State()
     ) {
-      SearchFeature(
-        fetchDrinks: { _ in
-          struct SomeError: Error {}
-          throw SomeError()
-        }
-      )
+      SearchFeature()
+    } withDependencies: {
+      $0.theCocktailDb.fetchDrinks = { _ in
+        throw TheCocktailDbClient.FetchDrinksError.invalidUrl
+      }
     }
-    XCTExpectFailure()
+
     await store.send(.loadDrinks) {
       $0.isLoading = true
     }
     
     await store.receive(
-      .drinksLoaded(
-        Result.failure(error)
+      .loadedDrinks(
+        .failure(TheCocktailDbClient.FetchDrinksError.invalidUrl)
       )
     ) {
       $0.isLoading = false
-      $0.drinks = []
-      $0.error = "The operation couldn’t be completed. (cocktails error 1.)"
+      $0.errorText = "Invalid URL"
+    }
+  }
+  
+  @MainActor
+  func testLoadDrinks_NoData_Failure() async throws {
+    let store = TestStore(
+      initialState: SearchFeature.State()
+    ) {
+      SearchFeature()
+    } withDependencies: {
+      $0.theCocktailDb.fetchDrinks = { _ in
+        throw TheCocktailDbClient.FetchDrinksError.noDataFromResponse
+      }
+    }
+
+    await store.send(.loadDrinks) {
+      $0.isLoading = true
+    }
+    
+    await store.receive(
+      .loadedDrinks(
+        .failure(TheCocktailDbClient.FetchDrinksError.noDataFromResponse)
+      )
+    ) {
+      $0.isLoading = false
+      $0.errorText = "Received no data from response"
+    }
+  }
+  
+  @MainActor
+  func testLoadDrinks_Decoding_Failure() async throws {
+    let store = TestStore(
+      initialState: SearchFeature.State()
+    ) {
+      SearchFeature()
+    } withDependencies: {
+      $0.theCocktailDb.fetchDrinks = { _ in
+        throw TheCocktailDbClient.FetchDrinksError.decodingFailed
+      }
+    }
+
+    await store.send(.loadDrinks) {
+      $0.isLoading = true
+    }
+    
+    await store.receive(
+      .loadedDrinks(
+        .failure(TheCocktailDbClient.FetchDrinksError.decodingFailed)
+      )
+    ) {
+      $0.isLoading = false
+      $0.errorText = "Failed decoding JSON"
     }
   }
 

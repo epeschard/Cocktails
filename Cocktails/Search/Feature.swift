@@ -15,7 +15,7 @@ struct SearchFeature: Reducer {
     case loadedDrinks(TaskResult<[Drink]>)
   }
   
-  let fetchDrinks: @Sendable (String) async throws -> [Drink]
+  @Dependency(\.theCocktailDb) var theCocktailDb
   
   func reduce(
     into state: inout State,
@@ -26,10 +26,16 @@ struct SearchFeature: Reducer {
     case .loadDrinks:
       state.isLoading = true
       return .run { [query = state.query] send in
-        let drinks = try await fetchDrinks(query)
-        await send(
-          .loadedDrinks(.success(drinks))
-        )
+        do {
+          let drinks: [Drink] = try await self.theCocktailDb.fetchDrinks(query)
+          await send(
+            .loadedDrinks(.success(drinks))
+          )
+        } catch {
+          await send(
+            .loadedDrinks(.failure(error))
+          )
+        }
       }
       
     case .loadedDrinks(.success(let cocktails)):
