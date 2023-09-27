@@ -17,7 +17,10 @@
 		FE3ABBAF2AC1734F007EA904 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3882A92AC16389003960B7 /* ViewController.swift */; };
 		FE3ABBB42AC186FA007EA904 /* Drink.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3ABBB32AC186FA007EA904 /* Drink.swift */; };
 		FE3ABBB62AC20024007EA904 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3ABBB52AC20024007EA904 /* Client.swift */; };
+		FE3B70742AC407DE00964CAF /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3B70732AC407DE00964CAF /* DetailViewController.swift */; };
+		FE5324AE2AC3348F0035248A /* DetailFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5324AD2AC3348F0035248A /* DetailFeature.swift */; };
 		FE6D04B12AC300A900432085 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6D04B02AC300A900432085 /* Error.swift */; };
+		FE6D04B32AC3093300432085 /* DrinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6D04B22AC3093300432085 /* DrinkCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,7 +46,10 @@
 		FE3882A92AC16389003960B7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		FE3ABBB32AC186FA007EA904 /* Drink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drink.swift; sourceTree = "<group>"; };
 		FE3ABBB52AC20024007EA904 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
+		FE3B70732AC407DE00964CAF /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		FE5324AD2AC3348F0035248A /* DetailFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailFeature.swift; sourceTree = "<group>"; };
 		FE6D04B02AC300A900432085 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		FE6D04B22AC3093300432085 /* DrinkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				FE3ABBB02AC1751D007EA904 /* Api */,
+				FE5324AC2AC3347C0035248A /* Detail */,
 				FE3882A52AC15EAF003960B7 /* Search */,
 				FE3882722ABF03C2003960B7 /* AppDelegate.swift */,
 				FE3882742ABF03C2003960B7 /* SceneDelegate.swift */,
@@ -110,6 +117,7 @@
 			children = (
 				FE3882A72AC15EEF003960B7 /* Feature.swift */,
 				FE3882A92AC16389003960B7 /* ViewController.swift */,
+				FE6D04B22AC3093300432085 /* DrinkCell.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -122,6 +130,15 @@
 				FE6D04B02AC300A900432085 /* Error.swift */,
 			);
 			path = Api;
+			sourceTree = "<group>";
+		};
+		FE5324AC2AC3347C0035248A /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				FE5324AD2AC3348F0035248A /* DetailFeature.swift */,
+				FE3B70732AC407DE00964CAF /* DetailViewController.swift */,
+			);
+			path = Detail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -231,10 +248,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				FE3ABBAF2AC1734F007EA904 /* ViewController.swift in Sources */,
+				FE3B70742AC407DE00964CAF /* DetailViewController.swift in Sources */,
 				FE3882732ABF03C2003960B7 /* AppDelegate.swift in Sources */,
+				FE6D04B32AC3093300432085 /* DrinkCell.swift in Sources */,
 				FE3ABBB62AC20024007EA904 /* Client.swift in Sources */,
 				FE3882752ABF03C2003960B7 /* SceneDelegate.swift in Sources */,
 				FE3ABBB42AC186FA007EA904 /* Drink.swift in Sources */,
+				FE5324AE2AC3348F0035248A /* DetailFeature.swift in Sources */,
 				FE6D04B12AC300A900432085 /* Error.swift in Sources */,
 				FE3882A82AC15EEF003960B7 /* Feature.swift in Sources */,
 			);

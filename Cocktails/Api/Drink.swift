@@ -3,6 +3,7 @@ import Foundation
 struct Cocktail: Decodable {
   var drinks: [Drink]
 }
+
 struct Drink: Decodable {
   
   private enum CodingKeys: String, CodingKey {
