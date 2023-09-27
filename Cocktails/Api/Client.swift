@@ -23,14 +23,15 @@ extension TheCocktailDbClient: DependencyKey {
       throw FetchDrinksError.noDataFromResponse
     }
     
-    guard let decodedResponse = try? JSONDecoder().decode(
-      CocktailResponse.self,
-      from: data
-    ) else {
+    do {
+      let decodedResponse = try JSONDecoder().decode(
+        Cocktail.self,
+        from: data
+      )
+      return decodedResponse.drinks
+    } catch {
       throw FetchDrinksError.decodingFailed
     }
-    
-    return decodedResponse.drinks
   }
 }
 

@@ -59,8 +59,8 @@ class SearchViewController: UITableViewController {
       )
     }
     let drink = viewStore.drinks[indexPath.row]
-    cell!.textLabel?.text = drink.strDrink
-    cell!.detailTextLabel?.text = drink.strInstructions
+    cell!.textLabel?.text = drink.name
+    cell!.detailTextLabel?.text = drink.instructions
     
     return cell!
   }
