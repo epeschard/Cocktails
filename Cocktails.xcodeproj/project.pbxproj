@@ -21,6 +21,8 @@
 		FE3B70862AC70CAD00964CAF /* DrinksFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE3B70852AC70CAD00964CAF /* DrinksFeature.swift */; };
 		FE3B708E2ACA9CED00964CAF /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = FE3B708D2ACA9CED00964CAF /* SDWebImage */; };
 		FE5324AE2AC3348F0035248A /* DetailFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5324AD2AC3348F0035248A /* DetailFeature.swift */; };
+		FE69C9C52ACACE80000C919C /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE69C9C42ACACE80000C919C /* ImageCell.swift */; };
+		FE69C9C72ACBEEC7000C919C /* DrinkDetailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE69C9C62ACBEEC7000C919C /* DrinkDetailTests.swift */; };
 		FE6D04B12AC300A900432085 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6D04B02AC300A900432085 /* Error.swift */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +52,8 @@
 		FE3B707F2AC58AEE00964CAF /* DrinkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkCell.swift; sourceTree = "<group>"; };
 		FE3B70852AC70CAD00964CAF /* DrinksFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinksFeature.swift; sourceTree = "<group>"; };
 		FE5324AD2AC3348F0035248A /* DetailFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailFeature.swift; sourceTree = "<group>"; };
+		FE69C9C42ACACE80000C919C /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
+		FE69C9C62ACBEEC7000C919C /* DrinkDetailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkDetailTests.swift; sourceTree = "<group>"; };
 		FE6D04B02AC300A900432085 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -110,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				FE3882892ABF03C3003960B7 /* SearchDrinksTests.swift */,
+				FE69C9C62ACBEEC7000C919C /* DrinkDetailTests.swift */,
 			);
 			path = CocktailsTests;
 			sourceTree = "<group>";
@@ -139,6 +144,7 @@
 			children = (
 				FE5324AD2AC3348F0035248A /* DetailFeature.swift */,
 				FE3B70732AC407DE00964CAF /* DetailViewController.swift */,
+				FE69C9C42ACACE80000C919C /* ImageCell.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -255,6 +261,7 @@
 				FE3B70742AC407DE00964CAF /* DetailViewController.swift in Sources */,
 				FE3882732ABF03C2003960B7 /* AppDelegate.swift in Sources */,
 				FE3B70792AC4EDFA00964CAF /* DrinksViewController.swift in Sources */,
+				FE69C9C52ACACE80000C919C /* ImageCell.swift in Sources */,
 				FE3ABBB62AC20024007EA904 /* Client.swift in Sources */,
 				FE3882752ABF03C2003960B7 /* SceneDelegate.swift in Sources */,
 				FE3ABBB42AC186FA007EA904 /* Drink.swift in Sources */,
@@ -269,6 +276,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FE38828A2ABF03C3003960B7 /* SearchDrinksTests.swift in Sources */,
+				FE69C9C72ACBEEC7000C919C /* DrinkDetailTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
