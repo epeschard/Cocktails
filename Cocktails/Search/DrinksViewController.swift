@@ -50,33 +50,39 @@ final class DrinksViewController: UITableViewController {
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     
-    if viewStore.loadedDrinks.isEmpty {
+    if let errorText = viewStore.errorText {
+      let errorIcon = UIImage(
+        systemName: "exclamationmark.triangle.fill"
+      )
+      let errorImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+      errorImage.image = errorIcon
+      let errorTitle = UILabel()
+      errorTitle.text = "ERROR"
+      errorTitle.font = UIFont.preferredFont(forTextStyle: .largeTitle)
+      let errorLabel = UILabel()
+      errorLabel.text = errorText
+      errorLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+      let errorView = UIStackView(
+        arrangedSubviews: [
+          UIView(),
+//          errorImage,
+          errorTitle,
+          errorLabel,
+          UIView()
+        ]
+      )
+      errorView.axis = .vertical
+      errorView.alignment = .center
+      errorView.distribution = .fillEqually
+      tableView.backgroundView = errorView
+      self.errorView = errorView
+    } else if viewStore.loadedDrinks.isEmpty {
       searchController.isActive = true
       DispatchQueue.main.async {
         self.searchController.searchBar.searchTextField.becomeFirstResponder()
       }
     } else if (viewStore.isLoading) {
       loadingView.startAnimating()
-    } else if let errorText = viewStore.errorText {
-      let errorIcon = UIImage(
-        systemName: "exclamationmark.triangle.fill"
-      )
-      let errorImage = UIImageView(image: errorIcon)
-      let errorTitle = UILabel()
-      errorTitle.text = "ERROR"
-      errorTitle.font = UIFont.preferredFont(forTextStyle: .headline)
-      let errorLabel = UILabel()
-      errorLabel.text = errorText
-      errorLabel.font = UIFont.preferredFont(forTextStyle: .body)
-      let errorView = UIStackView(
-        arrangedSubviews: [
-          errorImage,
-          errorTitle,
-          errorLabel,
-        ]
-      )
-      tableView.backgroundView = errorView
-      self.errorView = errorView
     }
   }
   
@@ -135,6 +141,9 @@ final class DrinksViewController: UITableViewController {
       }
     }
     if viewStore.loadedDrinks.isEmpty {
+      if viewStore.errorText != nil {
+        return nil
+      }
       return "Start typing to search for drinks"
     }
     return "Drinks from recent searches"

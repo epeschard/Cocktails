@@ -23,6 +23,9 @@
 		FE5324AE2AC3348F0035248A /* DetailFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5324AD2AC3348F0035248A /* DetailFeature.swift */; };
 		FE69C9C52ACACE80000C919C /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE69C9C42ACACE80000C919C /* ImageCell.swift */; };
 		FE69C9C72ACBEEC7000C919C /* DrinkDetailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE69C9C62ACBEEC7000C919C /* DrinkDetailTests.swift */; };
+		FE69C9CA2ACC06E2000C919C /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = FE69C9C92ACC06E2000C919C /* SnapshotTesting */; };
+		FE69C9CC2ACC0708000C919C /* SearchSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE69C9CB2ACC0708000C919C /* SearchSnapshotTests.swift */; };
+		FE69C9CE2ACC323E000C919C /* DetailSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE69C9CD2ACC323E000C919C /* DetailSnapshotTests.swift */; };
 		FE6D04B12AC300A900432085 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6D04B02AC300A900432085 /* Error.swift */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +57,8 @@
 		FE5324AD2AC3348F0035248A /* DetailFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailFeature.swift; sourceTree = "<group>"; };
 		FE69C9C42ACACE80000C919C /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		FE69C9C62ACBEEC7000C919C /* DrinkDetailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkDetailTests.swift; sourceTree = "<group>"; };
+		FE69C9CB2ACC0708000C919C /* SearchSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSnapshotTests.swift; sourceTree = "<group>"; };
+		FE69C9CD2ACC323E000C919C /* DetailSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSnapshotTests.swift; sourceTree = "<group>"; };
 		FE6D04B02AC300A900432085 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -71,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE69C9CA2ACC06E2000C919C /* SnapshotTesting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,6 +121,8 @@
 			children = (
 				FE3882892ABF03C3003960B7 /* SearchDrinksTests.swift */,
 				FE69C9C62ACBEEC7000C919C /* DrinkDetailTests.swift */,
+				FE69C9CB2ACC0708000C919C /* SearchSnapshotTests.swift */,
+				FE69C9CD2ACC323E000C919C /* DetailSnapshotTests.swift */,
 			);
 			path = CocktailsTests;
 			sourceTree = "<group>";
@@ -187,6 +195,9 @@
 				FE3882872ABF03C3003960B7 /* PBXTargetDependency */,
 			);
 			name = CocktailsTests;
+			packageProductDependencies = (
+				FE69C9C92ACC06E2000C919C /* SnapshotTesting */,
+			);
 			productName = CocktailsTests;
 			productReference = FE3882852ABF03C3003960B7 /* CocktailsTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -222,6 +233,7 @@
 			packageReferences = (
 				FE3882A22AC0199F003960B7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				FE3B708C2ACA9CED00964CAF /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				FE69C9C82ACC06E2000C919C /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 			);
 			productRefGroup = FE3882702ABF03C2003960B7 /* Products */;
 			projectDirPath = "";
@@ -277,6 +289,8 @@
 			files = (
 				FE38828A2ABF03C3003960B7 /* SearchDrinksTests.swift in Sources */,
 				FE69C9C72ACBEEC7000C919C /* DrinkDetailTests.swift in Sources */,
+				FE69C9CE2ACC323E000C919C /* DetailSnapshotTests.swift in Sources */,
+				FE69C9CC2ACC0708000C919C /* SearchSnapshotTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -564,6 +578,14 @@
 				minimumVersion = 5.18.2;
 			};
 		};
+		FE69C9C82ACC06E2000C919C /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.14.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -576,6 +598,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FE3B708C2ACA9CED00964CAF /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
+		};
+		FE69C9C92ACC06E2000C919C /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE69C9C82ACC06E2000C919C /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

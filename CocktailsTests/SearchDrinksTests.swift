@@ -165,7 +165,7 @@ final class SearchDrinksTests: XCTestCase {
   }
   
   @MainActor
-  func testLoadDrinks_InvalidUrl_Failure() async throws {
+  func testLoadDrinks_Failure_InvalidUrl() async throws {
     let mainQueue = DispatchQueue.test
     
     let store = TestStore(
@@ -199,7 +199,7 @@ final class SearchDrinksTests: XCTestCase {
   }
   
   @MainActor
-  func testLoadDrinks_NoData_Failure() async throws {
+  func testLoadDrinks_Failure_NoData() async throws {
     let mainQueue = DispatchQueue.test
     
     let store = TestStore(
@@ -233,7 +233,7 @@ final class SearchDrinksTests: XCTestCase {
   }
   
   @MainActor
-  func testLoadDrinks_Decoding_Failure() async throws {
+  func testLoadDrinks_Failure_Decoding() async throws {
     let mainQueue = DispatchQueue.test
     
     let store = TestStore(

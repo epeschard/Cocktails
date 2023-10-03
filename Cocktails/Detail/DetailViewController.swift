@@ -26,6 +26,7 @@ final class DetailViewController: UIViewController {
     super.viewDidLoad()
     
     title = viewStore.drink.name
+    navigationController?.navigationBar.prefersLargeTitles = true
     
     setupTableView()
     
