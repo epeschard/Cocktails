@@ -4,15 +4,13 @@ import SDWebImage
 import UIKit
 
 final class DetailViewController: UIViewController {
-  let viewStore: ViewStoreOf<DetailFeature>
-  var cancellables: Set<AnyCancellable> = []
+  var viewModel: DetailViewModel!
   var tableView: UITableView!
   var imageView: UIImageView!
   
   //MARK: - Initializers
 
-  init(store: StoreOf<DetailFeature>) {
-    self.viewStore = ViewStore(store, observe: { $0 })
+  init() {
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -25,18 +23,10 @@ final class DetailViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    title = viewStore.drink.name
+    title = viewModel.drink.name
     navigationController?.navigationBar.prefersLargeTitles = true
     
     setupTableView()
-    
-    viewStore.publisher.drink //Feature
-      .sink(
-        receiveValue: { [weak self] _ in
-          self?.tableView.reloadData()
-        }
-      )
-      .store(in: &cancellables)
   }
 }
 
@@ -51,7 +41,7 @@ extension DetailViewController: UITableViewDataSource {
     _ tableView: UITableView,
     numberOfRowsInSection section: Int
   ) -> Int {
-    let drink = viewStore.drink
+    let drink = viewModel.drink
     switch section {
     case 0:
       return drink.tags.isEmpty ? 2 : 3
@@ -84,8 +74,8 @@ extension DetailViewController: UITableViewDataSource {
     _ tableView: UITableView,
     titleForFooterInSection section: Int
   ) -> String? {
-    if section == 2, viewStore.drink.dateModified != nil {
-      return viewStore.drink.dateModified ?? ""
+    if section == 2, viewModel.drink.dateModified != nil {
+      return viewModel.drink.dateModified ?? ""
     }
     return nil
   }
@@ -123,7 +113,7 @@ extension DetailViewController: UITableViewDataSource {
     }
     valueCell?.selectionStyle = .none
     
-    let drink = viewStore.drink
+    let drink = viewModel.drink
     
     switch indexPath.section {
     case 0:
@@ -210,14 +200,14 @@ extension DetailViewController: UITableViewDelegate {
     switch indexPath.section {
     case 0:
       if indexPath.row == 0 {
-        viewStore.send(.imageButtonTapped)
+        viewModel.imageButtonTapped()
         tableView.deselectRow(at: indexPath, animated: true)
         return
       }
       return
     case 1:
       if indexPath.row == 1 {
-        viewStore.send(.videoButtonTapped)
+        viewModel.videoButtonTapped()
         tableView.deselectRow(at: indexPath, animated: true)
         return
       }
@@ -265,5 +255,27 @@ private extension DetailViewController {
       UITableViewCell.self,
       forCellReuseIdentifier: "value2"
     )
+  }
+}
+
+//MARK: - DetailViewControllerProtocol
+
+protocol DetailViewControllerProtocol {
+  func didLoadView()
+}
+
+extension DetailViewController: DetailViewControllerProtocol {
+  func didLoadView() {
+    tableView.reloadData()
+    /*
+    let indexPaths = [
+      IndexPath(row: <#T##Int#>, section: <#T##Int#>),
+      IndexPath(row: Int, section: <#T##Int#>),
+      IndexPath(row: <#T##Int#>, section: <#T##Int#>),
+    ]
+    tableView.reloadRows(
+      at: indexPaths,
+      with: .automatic
+    )*/
   }
 }

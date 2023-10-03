@@ -1,263 +1,88 @@
-import ComposableArchitecture
 import XCTest
 
 @testable import Cocktails
 
 final class DrinkDetailTests: XCTestCase {
   
-  @MainActor
-  func testImageButtonTapped_NoAction() async throws {
-    let openURL = OpenURLEffect { _ in return false }
+  func testImageButtonTapped_NoAction() {
     let withoutImageURL = Drink(
       id: "1",
       name: "gin 1",
-      alternateName: nil,
-      tagString: nil,
       glass: "glass",
       category: "category",
-      thumbnail: nil,
-      imageURL: nil,
-      videoURL: nil,
-      iba: nil,
-      alcoholic: nil,
-      ingredient1: nil,
-      ingredient2: nil,
-      ingredient3: nil,
-      ingredient4: nil,
-      ingredient5: nil,
-      ingredient6: nil,
-      ingredient7: nil,
-      ingredient8: nil,
-      ingredient9: nil,
-      ingredient10: nil,
-      ingredient11: nil,
-      ingredient12: nil,
-      ingredient13: nil,
-      ingredient14: nil,
-      ingredient15: nil,
-      measure1: nil,
-      measure2: nil,
-      measure3: nil,
-      measure4: nil,
-      measure5: nil,
-      measure6: nil,
-      measure7: nil,
-      measure8: nil,
-      measure9: nil,
-      measure10: nil,
-      measure11: nil,
-      measure12: nil,
-      measure13: nil,
-      measure14: nil,
-      measure15: nil,
-      instructions: "Instructions 1",
-      strImageAttribution: nil,
-      strCreativeCommonsConfirmed: nil,
-      dateModified: nil
+      instructions: "Instructions 1"
     )
     
-    let store = TestStore(
-      initialState: DetailFeature.State(
-        drink: withoutImageURL
-      )
-    ) {
-      DetailFeature()
-    } withDependencies: {
-      $0.openURL = openURL
-    }
-
-    await store.send(.imageButtonTapped)
+    let mockRouter = MockDetailRouter()
+    let viewModel = DetailViewModel(
+      router: mockRouter,
+      drink: withoutImageURL
+    )
+    
+    viewModel.imageButtonTapped()
+    
+    XCTAssertFalse(mockRouter.didCallOpenImageURL)
   }
   
-  @MainActor
-  func testImageButtonTapped_OpenSafari() async throws {
-    let openURL = OpenURLEffect { _ in return true }
+  func testImageButtonTapped_CallsRouter() {
     let withImageURL = Drink(
       id: "1",
       name: "gin 1",
-      alternateName: nil,
-      tagString: nil,
       glass: "glass",
       category: "category",
-      thumbnail: nil,
       imageURL: "https://www.x.com",
-      videoURL: nil,
-      iba: nil,
-      alcoholic: nil,
-      ingredient1: nil,
-      ingredient2: nil,
-      ingredient3: nil,
-      ingredient4: nil,
-      ingredient5: nil,
-      ingredient6: nil,
-      ingredient7: nil,
-      ingredient8: nil,
-      ingredient9: nil,
-      ingredient10: nil,
-      ingredient11: nil,
-      ingredient12: nil,
-      ingredient13: nil,
-      ingredient14: nil,
-      ingredient15: nil,
-      measure1: nil,
-      measure2: nil,
-      measure3: nil,
-      measure4: nil,
-      measure5: nil,
-      measure6: nil,
-      measure7: nil,
-      measure8: nil,
-      measure9: nil,
-      measure10: nil,
-      measure11: nil,
-      measure12: nil,
-      measure13: nil,
-      measure14: nil,
-      measure15: nil,
-      instructions: "Instructions 1",
-      strImageAttribution: nil,
-      strCreativeCommonsConfirmed: nil,
-      dateModified: nil
+      instructions: "Instructions 1"
     )
     
-    let store = TestStore(
-      initialState: DetailFeature.State(
-        drink: withImageURL
-      )
-    ) {
-      DetailFeature()
-    } withDependencies: {
-      $0.openURL = openURL
-    }
-
-    await store.send(.imageButtonTapped)
+    let mockRouter = MockDetailRouter()
+    let viewModel = DetailViewModel(
+      router: mockRouter,
+      drink: withImageURL
+    )
+    
+    viewModel.imageButtonTapped()
+    
+    XCTAssertTrue(mockRouter.didCallOpenImageURL)
   }
   
-  @MainActor
-  func testVideoButtonTapped_NoAction() async throws {
-    let openURL = OpenURLEffect { _ in return false }
+  func testVideoButtonTapped_NoAction() {
     let withoutVideoURL = Drink(
       id: "1",
       name: "gin 1",
-      alternateName: nil,
-      tagString: nil,
       glass: "glass",
       category: "category",
-      thumbnail: nil,
-      imageURL: nil,
-      videoURL: nil,
-      iba: nil,
-      alcoholic: nil,
-      ingredient1: nil,
-      ingredient2: nil,
-      ingredient3: nil,
-      ingredient4: nil,
-      ingredient5: nil,
-      ingredient6: nil,
-      ingredient7: nil,
-      ingredient8: nil,
-      ingredient9: nil,
-      ingredient10: nil,
-      ingredient11: nil,
-      ingredient12: nil,
-      ingredient13: nil,
-      ingredient14: nil,
-      ingredient15: nil,
-      measure1: nil,
-      measure2: nil,
-      measure3: nil,
-      measure4: nil,
-      measure5: nil,
-      measure6: nil,
-      measure7: nil,
-      measure8: nil,
-      measure9: nil,
-      measure10: nil,
-      measure11: nil,
-      measure12: nil,
-      measure13: nil,
-      measure14: nil,
-      measure15: nil,
-      instructions: "Instructions 1",
-      strImageAttribution: nil,
-      strCreativeCommonsConfirmed: nil,
-      dateModified: nil
+      instructions: "Instructions 1"
     )
     
-    let store = TestStore(
-      initialState: DetailFeature.State(
-        drink: withoutVideoURL
-      )
-    ) {
-      DetailFeature()
-    } withDependencies: {
-      $0.openURL = openURL
-    }
-
-    await store.send(.videoButtonTapped)
+    let mockRouter = MockDetailRouter()
+    let viewModel = DetailViewModel(
+      router: mockRouter,
+      drink: withoutVideoURL
+    )
+    
+    viewModel.videoButtonTapped()
+    
+    XCTAssertFalse(mockRouter.didCallOpenVideoURL)
   }
   
-  @MainActor
-  func testVideoButtonTapped_OpenSafari() async throws {
-    let openURL = OpenURLEffect { _ in return true }
+  func testVideoButtonTapped_CallsRouter() {
     let withVideoURL = Drink(
       id: "1",
       name: "gin 1",
-      alternateName: nil,
-      tagString: nil,
       glass: "glass",
       category: "category",
-      thumbnail: nil,
-      imageURL: nil,
       videoURL: "https://www.x.com",
-      iba: nil,
-      alcoholic: nil,
-      ingredient1: nil,
-      ingredient2: nil,
-      ingredient3: nil,
-      ingredient4: nil,
-      ingredient5: nil,
-      ingredient6: nil,
-      ingredient7: nil,
-      ingredient8: nil,
-      ingredient9: nil,
-      ingredient10: nil,
-      ingredient11: nil,
-      ingredient12: nil,
-      ingredient13: nil,
-      ingredient14: nil,
-      ingredient15: nil,
-      measure1: nil,
-      measure2: nil,
-      measure3: nil,
-      measure4: nil,
-      measure5: nil,
-      measure6: nil,
-      measure7: nil,
-      measure8: nil,
-      measure9: nil,
-      measure10: nil,
-      measure11: nil,
-      measure12: nil,
-      measure13: nil,
-      measure14: nil,
-      measure15: nil,
-      instructions: "Instructions 1",
-      strImageAttribution: nil,
-      strCreativeCommonsConfirmed: nil,
-      dateModified: nil
+      instructions: "Instructions 1"
     )
     
-    let store = TestStore(
-      initialState: DetailFeature.State(
-        drink: withVideoURL
-      )
-    ) {
-      DetailFeature()
-    } withDependencies: {
-      $0.openURL = openURL
-    }
-
-    await store.send(.videoButtonTapped)
+    let mockRouter = MockDetailRouter()
+    let viewModel = DetailViewModel(
+      router: mockRouter,
+      drink: withVideoURL
+    )
+    
+    viewModel.videoButtonTapped()
+    
+    XCTAssertTrue(mockRouter.didCallOpenVideoURL)
   }
 }

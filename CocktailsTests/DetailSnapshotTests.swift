@@ -18,15 +18,14 @@ class DetailSnapshotTests: XCTestCase {
       instructions: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
     )
     
-    let store = Store(
-      initialState: DetailFeature.State(
-        drink: drink
-      )
-    ) {
-      DetailFeature()
-    }
+    let mockRouter = MockDetailRouter()
+    let viewModel = DetailViewModel(
+      router: mockRouter,
+      drink: drink
+    )
     
-    let rootVC = DetailViewController(store: store)
+    let rootVC = DetailViewController()
+    rootVC.viewModel = viewModel
     let nav = UINavigationController(rootViewController: rootVC)
 
     assertSnapshots(of: nav, as: ["iPhone13ProMax": .image(on: .iPhone13ProMax)])
@@ -47,15 +46,14 @@ class DetailSnapshotTests: XCTestCase {
       instructions: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
     )
     
-    let store = Store(
-      initialState: DetailFeature.State(
-        drink: drink
-      )
-    ) {
-      DetailFeature()
-    }
+    let mockRouter = MockDetailRouter()
+    let viewModel = DetailViewModel(
+      router: mockRouter,
+      drink: drink
+    )
     
-    let rootVC = DetailViewController(store: store)
+    let rootVC = DetailViewController()
+    rootVC.viewModel = viewModel
     let nav = UINavigationController(rootViewController: rootVC)
 
     assertSnapshots(of: nav, as: ["iPhone13ProMax": .image(on: .iPhone13ProMax)])
