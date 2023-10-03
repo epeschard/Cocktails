@@ -4,7 +4,7 @@ struct Cocktail: Decodable {
   var drinks: [Drink]
 }
 
-struct Drink: Decodable {
+struct Drink: Decodable, Identifiable {
   
   private enum CodingKeys: String, CodingKey {
     case id = "idDrink"
@@ -53,12 +53,6 @@ struct Drink: Decodable {
     case videoURL = "strVideo"
 
     case instructions = "strInstructions"
-    case instructionsES = "strInstructionsES"
-    case instructionsDE = "strInstructionsDE"
-    case instructionsFR = "strInstructionsFR"
-    case instructionsIT = "strInstructionsIT"
-    case instructionsZH_HANS = "strInstructionsZH-HANS"
-    case instructionsZH_HANT = "strInstructionsZH-HANT"
     
     case alternateName = "strDrinkAlternate"
   }
@@ -112,12 +106,6 @@ struct Drink: Decodable {
   var measure15: String?
 
   var instructions: String
-  var instructionsES: String?
-  var instructionsDE: String?
-  var instructionsFR: String?
-  var instructionsIT: String?
-  var instructionsZH_HANS: String?
-  var instructionsZH_HANT: String?
   
   var strImageAttribution: String?
   var strCreativeCommonsConfirmed: String?
@@ -129,55 +117,59 @@ struct Drink: Decodable {
     return tagString?.components(separatedBy: ",") ?? []
   }
   
-  var ingredients: Dictionary<String, String> {
-    var ingredients: [String: String] = [String: String]()
+  var ingredients: [(name: String, measure: String)] {
+    var ingredients = [(name: String, measure: String)] ()
     if let measure1 = measure1, let ingredient1 = ingredient1 {
-      ingredients[measure1] = ingredient1
+      ingredients.append((ingredient1, measure1))
     }
     if let measure2 = measure2, let ingredient2 = ingredient2 {
-      ingredients[measure2] = ingredient2
+      ingredients.append((ingredient2, measure2))
     }
     if let measure3 = measure3, let ingredient3 = ingredient3 {
-      ingredients[measure3] = ingredient3
+      ingredients.append((ingredient3, measure3))
     }
     if let measure4 = measure4, let ingredient4 = ingredient4 {
-      ingredients[measure4] = ingredient4
+      ingredients.append((ingredient4, measure4))
     }
     if let measure5 = measure5, let ingredient5 = ingredient5 {
-      ingredients[measure5] = ingredient5
+      ingredients.append((ingredient5, measure5))
     }
     if let measure6 = measure6, let ingredient6 = ingredient6 {
-      ingredients[measure6] = ingredient6
+      ingredients.append((ingredient6, measure6))
     }
     if let measure7 = measure7, let ingredient7 = ingredient7 {
-      ingredients[measure7] = ingredient7
+      ingredients.append((ingredient7, measure7))
     }
     if let measure8 = measure8, let ingredient8 = ingredient8 {
-      ingredients[measure8] = ingredient8
+      ingredients.append((ingredient8, measure8))
     }
     if let measure9 = measure9, let ingredient9 = ingredient9 {
-      ingredients[measure9] = ingredient9
+      ingredients.append((ingredient9, measure9))
     }
     if let measure10 = measure10, let ingredient10 = ingredient10 {
-      ingredients[measure10] = ingredient10
+      ingredients.append((ingredient10, measure10))
     }
     if let measure11 = measure11, let ingredient11 = ingredient11 {
-      ingredients[measure11] = ingredient11
+      ingredients.append((ingredient11, measure11))
     }
     if let measure12 = measure12, let ingredient12 = ingredient12 {
-      ingredients[measure12] = ingredient12
+      ingredients.append((ingredient12, measure12))
     }
     if let measure13 = measure13, let ingredient13 = ingredient13 {
-      ingredients[measure13] = ingredient13
+      ingredients.append((ingredient13, measure13))
     }
     if let measure14 = measure14, let ingredient14 = ingredient14 {
-      ingredients[measure14] = ingredient14
+      ingredients.append((ingredient14, measure14))
     }
     if let measure15 = measure15, let ingredient15 = ingredient15 {
-      ingredients[measure15] = ingredient15
+      ingredients.append((ingredient15, measure15))
     }
-
+    
     return ingredients
+  }
+  
+  var hasImage: Bool {
+    (imageURL != nil) || (thumbnail != nil)
   }
 }
 

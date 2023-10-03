@@ -1,5 +1,11 @@
 import Foundation
 
+//MARK: - Equatable
+
+extension TheCocktailDbClient.FetchDrinksError: Equatable {}
+
+//MARK: - Error
+
 extension TheCocktailDbClient {  
   enum FetchDrinksError: Error {
     case noDataFromResponse
@@ -7,8 +13,6 @@ extension TheCocktailDbClient {
     case invalidUrl
   }
 }
-
-extension TheCocktailDbClient.FetchDrinksError: Equatable {}
 
 extension TheCocktailDbClient.FetchDrinksError: LocalizedError {
   var errorDescription: String? {

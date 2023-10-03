@@ -2,11 +2,22 @@ import ComposableArchitecture
 import Foundation
 
 struct TheCocktailDbClient {
-  var fetchDrinks: @Sendable (String) async throws -> [Drink]
+  var fetchDrinks: @Sendable (String) async throws -> IdentifiedArrayOf<Drink>
 }
 
 extension TheCocktailDbClient: DependencyKey {
+
   static let liveValue = Self { query in
+    @Dependency(\.urlSessionWithCache) var urlSessionWithCache
+    let configuration = URLSessionConfiguration.default
+    configuration.requestCachePolicy = .returnCacheDataElseLoad
+    configuration.urlCache = URLCache(
+      memoryCapacity: 10 * 1024 * 1024,
+      diskCapacity: 50 * 1024 * 1024,
+      diskPath: nil
+    )
+    let urlSession = URLSession(configuration: configuration)
+    
     var components = URLComponents()
     components.scheme = "https"
     components.host = "thecocktaildb.com"
@@ -18,7 +29,7 @@ extension TheCocktailDbClient: DependencyKey {
       throw FetchDrinksError.invalidUrl
     }
     
-    guard let (data, _) = try? await URLSession.shared
+    guard let (data, _) = try? await urlSession
       .data(from: componentsUrl) else {
       throw FetchDrinksError.noDataFromResponse
     }
@@ -28,7 +39,11 @@ extension TheCocktailDbClient: DependencyKey {
         Cocktail.self,
         from: data
       )
-      return decodedResponse.drinks
+      let drinks = decodedResponse.drinks
+      
+      return IdentifiedArray(
+        uniqueElements: drinks.map { $0 }
+      )
     } catch {
       throw FetchDrinksError.decodingFailed
     }
