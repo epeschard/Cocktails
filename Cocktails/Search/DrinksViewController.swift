@@ -29,14 +29,14 @@ final class DrinksViewController: UITableViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    self.title = "Cocktails"
+    title = "Cocktails"
     navigationController?.navigationBar.prefersLargeTitles = true
 
     setupLoadingView()
     setupTableView()
     setupSearchController()
 
-    self.viewStore.publisher.loadedDrinks
+    viewStore.publisher.loadedDrinks
       .sink(
         receiveValue: { [weak self] _ in
           self?.loadingView.stopAnimating()
@@ -45,16 +45,17 @@ final class DrinksViewController: UITableViewController {
         }
       )
       .store(in: &cancellables)
-
-    viewStore.send(
-      .search(query: "gin")
-    )
   }
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-
-    if (viewStore.isLoading) {
+    
+    if viewStore.loadedDrinks.isEmpty {
+      searchController.isActive = true
+      DispatchQueue.main.async {
+        self.searchController.searchBar.searchTextField.becomeFirstResponder()
+      }
+    } else if (viewStore.isLoading) {
       loadingView.startAnimating()
     } else if let errorText = viewStore.errorText {
       let errorIcon = UIImage(
@@ -133,6 +134,9 @@ final class DrinksViewController: UITableViewController {
         return nil
       }
     }
+    if viewStore.loadedDrinks.isEmpty {
+      return "Start typing to search for drinks"
+    }
     return "Drinks from recent searches"
   }
   
@@ -188,7 +192,7 @@ private extension DrinksViewController {
     searchController = UISearchController(searchResultsController: nil)
     searchController.searchResultsUpdater = self
     searchController.obscuresBackgroundDuringPresentation = false
-    searchController.searchBar.placeholder = "Search Items"
+    searchController.searchBar.placeholder = "Search cocktail drinks"
     navigationItem.searchController = searchController
     definesPresentationContext = true
   }
