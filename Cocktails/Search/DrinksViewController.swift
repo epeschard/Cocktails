@@ -1,5 +1,6 @@
 import Combine
 import ComposableArchitecture
+import SDWebImage
 import UIKit
 
 let drinkCellIdentifier = "subtitle"
@@ -176,6 +177,7 @@ private extension DrinksViewController {
   
   func setupTableView() {
     tableView.isPrefetchingEnabled = true
+    tableView.prefetchDataSource = self
     
     tableView.register(
       DrinkCell.self,
@@ -207,3 +209,19 @@ extension DrinksViewController: UISearchResultsUpdating {
   }
 }
 
+//MARK: - UITableViewDataSourcePrefetching
+
+extension DrinksViewController: UITableViewDataSourcePrefetching {
+  func tableView(
+    _ tableView: UITableView,
+    prefetchRowsAt indexPaths: [IndexPath]
+  ) {
+    let thumbnailStrings = indexPaths.compactMap {
+      viewStore.searchResults[$0.row].thumbnail
+    }
+    let thumbnailURLs = thumbnailStrings.compactMap {
+      URL(string: $0)
+    }
+    SDWebImagePrefetcher.shared.prefetchURLs(thumbnailURLs)
+  }
+}
