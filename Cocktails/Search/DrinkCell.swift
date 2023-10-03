@@ -36,9 +36,11 @@ final class DrinkCell: UITableViewCell {
     thumb.translatesAutoresizingMaskIntoConstraints = false
     title.translatesAutoresizingMaskIntoConstraints = false
     title.font = UIFont.preferredFont(forTextStyle: .headline)
+    title.setContentHuggingPriority(.defaultLow, for: .vertical)
     instructions.translatesAutoresizingMaskIntoConstraints = false
     instructions.font = UIFont.preferredFont(forTextStyle: .body)
     instructions.numberOfLines = 4
+    title.setContentHuggingPriority(.defaultHigh, for: .vertical)
           
     // Add the UI components
     contentView.addSubview(thumb)
