@@ -45,16 +45,7 @@ final class DrinksViewController: UITableViewController {
         }
       )
       .store(in: &cancellables)
-    
-    self.viewStore.publisher.loadedDrinks
-      .sink(
-        receiveValue: { [weak self] _ in
-          self?.loadingView.stopAnimating()
-          self?.tableView.reloadData()
-        }
-      )
-      .store(in: &cancellables)
-    
+
     viewStore.send(
       .search(query: "gin")
     )
@@ -151,7 +142,12 @@ final class DrinksViewController: UITableViewController {
     _ tableView: UITableView,
     didSelectRowAt indexPath: IndexPath
   ) {
-    let drink = self.viewStore.loadedDrinks[indexPath.row]
+    let drink: Drink
+    if let searchText = searchController.searchBar.text, !searchText.isEmpty {
+      drink = self.viewStore.searchResults[indexPath.row]
+    } else {
+      drink = self.viewStore.loadedDrinks[indexPath.row]
+    }
     
     let detail = DetailViewController(
       store: Store(
@@ -216,12 +212,23 @@ extension DrinksViewController: UITableViewDataSourcePrefetching {
     _ tableView: UITableView,
     prefetchRowsAt indexPaths: [IndexPath]
   ) {
-    let thumbnailStrings = indexPaths.compactMap {
-      viewStore.searchResults[$0.row].thumbnail
+    let thumbnailURLs: [URL]
+    if let searchText = searchController.searchBar.text, !searchText.isEmpty {
+      let thumbnailStrings = indexPaths.compactMap {
+        viewStore.loadedDrinks[$0.row].thumbnail
+      }
+      thumbnailURLs = thumbnailStrings.compactMap {
+        URL(string: $0)
+      }
+    } else {
+      let thumbnailStrings = indexPaths.compactMap {
+        viewStore.searchResults[$0.row].thumbnail
+      }
+      thumbnailURLs = thumbnailStrings.compactMap {
+        URL(string: $0)
+      }
     }
-    let thumbnailURLs = thumbnailStrings.compactMap {
-      URL(string: $0)
-    }
+    
     SDWebImagePrefetcher.shared.prefetchURLs(thumbnailURLs)
   }
 }
