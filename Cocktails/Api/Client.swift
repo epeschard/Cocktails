@@ -8,7 +8,6 @@ struct TheCocktailDbClient {
 extension TheCocktailDbClient: DependencyKey {
 
   static let liveValue = Self { query in
-    @Dependency(\.urlSessionWithCache) var urlSessionWithCache
     let configuration = URLSessionConfiguration.default
     configuration.requestCachePolicy = .returnCacheDataElseLoad
     configuration.urlCache = URLCache(
