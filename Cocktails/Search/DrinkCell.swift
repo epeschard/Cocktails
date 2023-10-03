@@ -1,3 +1,4 @@
+import SDWebImage
 import UIKit
 
 final class DrinkCell: UITableViewCell {
@@ -62,9 +63,19 @@ final class DrinkCell: UITableViewCell {
   }
   
   func configure(with drink: Drink) {
+    thumb.sd_imageIndicator = SDWebImageActivityIndicator.gray
+    thumb.sd_imageIndicator = SDWebImageProgressIndicator.default
     
     let placeholderImage = UIImage(systemName: "wineglass")
-    thumb.image = placeholderImage
+    if let string = drink.thumbnail, let thumbnailURL = URL(string: string) {
+      thumb.sd_setImage(
+        with: thumbnailURL,
+        placeholderImage: placeholderImage,
+        options: [.progressiveLoad, .highPriority]
+      )
+    } else {
+      thumb.image = placeholderImage
+    }
     
     title.text = drink.name
     instructions.text = drink.instructions
