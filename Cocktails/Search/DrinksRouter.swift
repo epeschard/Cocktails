@@ -1,18 +1,30 @@
 import UIKit
 
 protocol DrinksRouterProtocol {
-  func didSelect(_ drink:Drink, from parent: UIViewController?, sender: Any?)
+  func showDetailView(
+    for drink:Drink,
+    from parent: UIViewController?,
+    sender: Any?
+  )
 }
 
 class MockDrinksRouter: DrinksRouterProtocol {
-  var didSelectCalled: Bool = false
-  func didSelect(_ drink: Drink, from _: UIViewController?, sender: Any?) {
-    didSelectCalled = true
+  var didCallShowDetailView: Bool = false
+  func showDetailView(
+    for drink: Drink,
+    from _: UIViewController?,
+    sender: Any?
+  ) {
+    didCallShowDetailView = true
   }
 }
 
 class DrinksRouter: DrinksRouterProtocol {
-  func didSelect(_ drink: Drink, from parent: UIViewController?, sender: Any?) {
+  func showDetailView(
+    for drink: Drink,
+    from parent: UIViewController?,
+    sender: Any?
+  ) {
     let drinkRouter = DetailRouter()
     let detailViewModel = DetailViewModel(
       router: drinkRouter,

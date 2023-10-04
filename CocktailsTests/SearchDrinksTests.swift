@@ -1,3 +1,4 @@
+import IdentifiedCollections
 import XCTest
 
 @testable import Cocktails

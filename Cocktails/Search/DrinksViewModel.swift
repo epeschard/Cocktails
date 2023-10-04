@@ -91,7 +91,11 @@ class DrinksViewModel {
     searchResults = []
   }
   
-  func didSelect(_ drink: Drink, from parent: UIViewController?, sender: Any?) {
-    router.didSelect(drink, from: parent, sender: sender)
+  func didSelect(
+    _ drink: Drink,
+    from parent: UIViewController?,
+    sender: Any?
+  ) {
+    router.showDetailView(for: drink, from: parent, sender: sender)
   }
 }

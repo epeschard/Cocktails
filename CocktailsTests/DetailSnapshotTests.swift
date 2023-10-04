@@ -23,9 +23,10 @@ class DetailSnapshotTests: XCTestCase {
       drink: drink
     )
     
-    let rootVC = DetailViewController()
-    rootVC.viewModel = viewModel
-    let nav = UINavigationController(rootViewController: rootVC)
+    let detailVC = DetailViewController()
+    detailVC.viewModel = viewModel
+    viewModel.view = detailVC
+    let nav = UINavigationController(rootViewController: detailVC)
 
     assertSnapshots(of: nav, as: ["iPhone13ProMax": .image(on: .iPhone13ProMax)])
   }
@@ -49,9 +50,10 @@ class DetailSnapshotTests: XCTestCase {
       drink: drink
     )
     
-    let rootVC = DetailViewController()
-    rootVC.viewModel = viewModel
-    let nav = UINavigationController(rootViewController: rootVC)
+    let detailVC = DetailViewController()
+    detailVC.viewModel = viewModel
+    viewModel.view = detailVC
+    let nav = UINavigationController(rootViewController: detailVC)
 
     assertSnapshots(of: nav, as: ["iPhone13ProMax": .image(on: .iPhone13ProMax)])
   }
