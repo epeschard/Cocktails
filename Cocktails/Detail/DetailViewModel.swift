@@ -16,7 +16,6 @@ class DetailViewModel {
   }
   
   func loadView() {
-
     self.view.didLoadView()
   }
   

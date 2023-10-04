@@ -1,5 +1,4 @@
 import Combine
-import ComposableArchitecture
 import SDWebImage
 import UIKit
 
@@ -23,10 +22,7 @@ final class DetailViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    title = viewModel.drink.name
-    navigationController?.navigationBar.prefersLargeTitles = true
-    
-    setupTableView()
+    viewModel.loadView()
   }
 }
 
@@ -266,6 +262,11 @@ protocol DetailViewControllerProtocol {
 
 extension DetailViewController: DetailViewControllerProtocol {
   func didLoadView() {
+    title = viewModel.drink.name
+    navigationController?.navigationBar.prefersLargeTitles = true
+    
+    setupTableView()
+    
     tableView.reloadData()
     /*
     let indexPaths = [

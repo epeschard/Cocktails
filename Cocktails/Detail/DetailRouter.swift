@@ -7,13 +7,11 @@ protocol DetailRouterProtocol {
 
 class MockDetailRouter: DetailRouterProtocol {
   var didCallOpenImageURL = false
-
   func openImageURL(_ imageURL: URL) {
     didCallOpenImageURL = true
   }
   
   var didCallOpenVideoURL = false
-
   func openVideoURL(_ videoURL: URL) {
     didCallOpenVideoURL = true
   }

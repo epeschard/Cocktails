@@ -4,265 +4,270 @@ import XCTest
 @testable import Cocktails
 
 final class SearchDrinksTests: XCTestCase {
-
-  @MainActor
-  func testLoadDrinks_Success() async throws {
-    
-    let mainQueue = DispatchQueue.test
+  
+  func testLoadDrinks_Success() {
     
     var drinks: IdentifiedArrayOf<Drink> = []
-    let drink1 = Drink(
+    let emptyRed = Drink(
       id: "1",
-      name: "gin 1",
-      alternateName: nil,
-      tagString: nil,
-      glass: "glass",
-      category: "category",
-      thumbnail: nil,
-      imageURL: nil,
-      videoURL: nil,
-      iba: nil,
-      alcoholic: nil,
-      ingredient1: nil,
-      ingredient2: nil,
-      ingredient3: nil,
-      ingredient4: nil,
-      ingredient5: nil,
-      ingredient6: nil,
-      ingredient7: nil,
-      ingredient8: nil,
-      ingredient9: nil,
-      ingredient10: nil,
-      ingredient11: nil,
-      ingredient12: nil,
-      ingredient13: nil,
-      ingredient14: nil,
-      ingredient15: nil,
-      measure1: nil,
-      measure2: nil,
-      measure3: nil,
-      measure4: nil,
-      measure5: nil,
-      measure6: nil,
-      measure7: nil,
-      measure8: nil,
-      measure9: nil,
-      measure10: nil,
-      measure11: nil,
-      measure12: nil,
-      measure13: nil,
-      measure14: nil,
-      measure15: nil,
-      instructions: "Instructions 1",
-      strImageAttribution: nil,
-      strCreativeCommonsConfirmed: nil,
-      dateModified: nil
+      name: "Empty Red Wineglass",
+      tagString: "Empty,Wineglass,Test",
+      glass: "Wine glass",
+      category: "Healthy liver",
+      ingredient1: "Red wine",
+      measure1: "0 oz",
+      instructions: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
     )
-    let drink2 = Drink(
+    let emptyRose = Drink(
       id: "2",
-      name: "gin 2",
-      alternateName: nil,
-      tagString: nil,
-      glass: "glass",
-      category: "category",
-      thumbnail: nil,
-      imageURL: nil,
-      videoURL: nil,
-      iba: nil,
-      alcoholic: nil,
-      ingredient1: nil,
-      ingredient2: nil,
-      ingredient3: nil,
-      ingredient4: nil,
-      ingredient5: nil,
-      ingredient6: nil,
-      ingredient7: nil,
-      ingredient8: nil,
-      ingredient9: nil,
-      ingredient10: nil,
-      ingredient11: nil,
-      ingredient12: nil,
-      ingredient13: nil,
-      ingredient14: nil,
-      ingredient15: nil,
-      measure1: nil,
-      measure2: nil,
-      measure3: nil,
-      measure4: nil,
-      measure5: nil,
-      measure6: nil,
-      measure7: nil,
-      measure8: nil,
-      measure9: nil,
-      measure10: nil,
-      measure11: nil,
-      measure12: nil,
-      measure13: nil,
-      measure14: nil,
-      measure15: nil,
-      instructions: "Instructions 1",
-      strImageAttribution: nil,
-      strCreativeCommonsConfirmed: nil,
-      dateModified: nil
+      name: "Empty Rosé Wineglass",
+      tagString: "Empty,Wineglass,Test",
+      glass: "Wine glass",
+      category: "Healthy liver",
+      ingredient1: "Rosé wine",
+      measure1: "0 oz",
+      instructions: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
     )
-    drinks.append(drink1)
-    drinks.append(drink2)
+    let emptyWhite = Drink(
+      id: "3",
+      name: "Empty White Wineglass",
+      tagString: "Empty,Wineglass,Test",
+      glass: "Wine glass",
+      category: "Healthy liver",
+      ingredient1: "White wine",
+      measure1: "0 oz",
+      instructions: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+    )
+    drinks.append(emptyRed)
+    drinks.append(emptyRose)
+    drinks.append(emptyWhite)
     
-    let store = TestStore(
-      initialState: DrinksFeature.State()
-    ) {
-      DrinksFeature()
-    } withDependencies: {
-      $0.theCocktailDb.fetchDrinks = { [drinks = drinks] query in
-        return drinks
-      }
-      $0.mainQueue = mainQueue.eraseToAnyScheduler()
+    let testCocktailDb = TheCocktailDbClient.testValue
+    
+    let testView = TestDrinksView()
+    let mockRouter = MockDrinksRouter()
+    let viewModel = DrinksViewModel(
+      router: mockRouter,
+      theCocktailDb: testCocktailDb
+    )
+    viewModel.view = testView
+    
+    viewModel.searchTextDidChange(searchText: "e")
+    XCTAssertEqual(viewModel.searchText, "e")
+    XCTAssertFalse(viewModel.isLoading)
+    
+    let expectation1 = XCTestExpectation(description: "first debounce")
+    DispatchQueue.global().async {
+      Thread.sleep(forTimeInterval: 0.2)
+      expectation1.fulfill()
     }
-
-    await store.send(.searchTextDidChange("g")) {
-      $0.searchText = "g"
-    }
-    await mainQueue.advance(by: 0.2)
     
     //Nothing emits right away
-    XCTAssertEqual(store.state.isLoading, false)
+    XCTAssertFalse(viewModel.isLoading)
+    XCTAssertFalse(testView.startLoadingWasCalled)
     
-    await store.send(.searchTextDidChange("gi")) {
-      $0.searchText = "gi"
+    viewModel.searchTextDidChange(searchText: "em")
+    XCTAssertEqual(viewModel.searchText, "em")
+    
+    let expectation2 = XCTestExpectation(description: "second debounce")
+    DispatchQueue.global().async {
+      Thread.sleep(forTimeInterval: 0.4)
+      expectation2.fulfill()
     }
-    await mainQueue.advance(by: 0.4)
     
     //Search field text changes are still being debounced
-    XCTAssertEqual(store.state.isLoading, false)
+    XCTAssertFalse(viewModel.isLoading)
+    XCTAssertFalse(testView.startLoadingWasCalled)
     
-    await store.send(.searchTextDidChange("gin")) {
-      $0.searchText = "gin"
-    }
-    await mainQueue.advance(by: 0.5)
+    viewModel.searchTextDidChange(searchText: "empty")
+    XCTAssertEqual(viewModel.searchText, "empty")
     
-    await store.receive(
-      .search(query: "gin")
-    ) {
-      $0.isLoading = true
+    let expectation3 = XCTestExpectation(description: "third's the charm")
+    DispatchQueue.global().async {
+      Thread.sleep(forTimeInterval: 0.6)
+      expectation3.fulfill()
     }
+    wait(for: [expectation1, expectation2, expectation3], timeout: 1)
     
-    await store.receive(
-      .searchResponse(
-        .success(
-          drinks
-        )
-      )
-    ) {
-      $0.isLoading = false
-      $0.loadedDrinks = drinks
-      $0.searchResults = drinks
+    let expectation4 = XCTestExpectation(description: "call search(query:)")
+    DispatchQueue.global().async {
+      Thread.sleep(forTimeInterval: 0.5)
+      expectation4.fulfill()
     }
+    wait(for: [expectation4], timeout: 5)
+    XCTAssertTrue(testView.startLoadingWasCalled)
     
-    await store.send(.didClearSearchText) {
-      $0.searchText = ""
-      $0.searchResults = []
+    let expectation5 = XCTestExpectation(description: "fetch drinks from TheCocktailDb")
+    DispatchQueue.global().async {
+      Thread.sleep(forTimeInterval: 0.5)
+      expectation5.fulfill()
     }
+    wait(for: [expectation5], timeout: 3)
+    
+    XCTAssertFalse(viewModel.isLoading)
+    XCTAssertEqual(viewModel.loadedDrinks, drinks)
+    XCTAssertEqual(viewModel.searchResults, drinks)
+    
+    viewModel.didClearSearchText()
+    
+    XCTAssertEqual(viewModel.searchText, "")
+    XCTAssertEqual(viewModel.searchResults, [])
   }
   
-  @MainActor
-  func testLoadDrinks_Failure_InvalidUrl() async throws {
-    let mainQueue = DispatchQueue.test
+  func testLoadDrinks_Failure_InvalidUrl() {
+    let testCocktailDb = TheCocktailDbClient.testInvalidUrl
     
-    let store = TestStore(
-      initialState: DrinksFeature.State()
-    ) {
-      DrinksFeature()
-    } withDependencies: {
-      $0.theCocktailDb.fetchDrinks = { _ in
-        throw TheCocktailDbClient.FetchDrinksError.invalidUrl
-      }
-      $0.mainQueue = mainQueue.eraseToAnyScheduler()
-    }
-
-    await store.send(.searchTextDidChange("gin"))
-    await mainQueue.advance(by: 0.6)
+    let testView = TestDrinksView()
+    let mockRouter = MockDrinksRouter()
+    let viewModel = DrinksViewModel(
+      router: mockRouter,
+      theCocktailDb: testCocktailDb
+    )
+    viewModel.view = testView
     
-    await store.receive(
-      .search(query: "gin")
-    ) {
-      $0.isLoading = true
-    }
+    viewModel.searchTextDidChange(searchText: "gin")
+    XCTAssertEqual(viewModel.searchText, "gin")
     
-    await store.receive(
-      .searchResponse(
-        .failure(TheCocktailDbClient.FetchDrinksError.invalidUrl)
-      )
-    ) {
-      $0.isLoading = false
-      $0.errorText = "Invalid URL"
+    let expectation1 = XCTestExpectation(description: "call search(query:)")
+    DispatchQueue.global().async {
+      Thread.sleep(forTimeInterval: 0.6)
+      expectation1.fulfill()
     }
+    wait(for: [expectation1], timeout: 1)
+    XCTAssertTrue(testView.startLoadingWasCalled)
+    
+    let expectation2 = XCTestExpectation(description: "fetch drinks from TheCocktailDb")
+    DispatchQueue.global().async {
+      Thread.sleep(forTimeInterval: 0.5)
+      expectation2.fulfill()
+    }
+    wait(for: [expectation2], timeout: 1)
+    
+    XCTAssertFalse(viewModel.isLoading)
+    XCTAssertEqual(viewModel.errorText, "Invalid URL")
   }
   
-  @MainActor
-  func testLoadDrinks_Failure_NoData() async throws {
-    let mainQueue = DispatchQueue.test
+  func testLoadDrinks_Failure_NoData() {
+    let testCocktailDb = TheCocktailDbClient.testNoDataFromResponse
     
-    let store = TestStore(
-      initialState: DrinksFeature.State()
-    ) {
-      DrinksFeature()
-    } withDependencies: {
-      $0.theCocktailDb.fetchDrinks = { _ in
-        throw TheCocktailDbClient.FetchDrinksError.noDataFromResponse
-      }
-      $0.mainQueue = mainQueue.eraseToAnyScheduler()
-    }
-
-    await store.send(.searchTextDidChange("gin"))
-    await mainQueue.advance(by: 0.6)
+    let testView = TestDrinksView()
+    let mockRouter = MockDrinksRouter()
+    let viewModel = DrinksViewModel(
+      router: mockRouter,
+      theCocktailDb: testCocktailDb
+    )
+    viewModel.view = testView
     
-    await store.receive(
-      .search(query: "gin")
-    ) {
-      $0.isLoading = true
-    }
+    viewModel.searchTextDidChange(searchText: "gin")
+    XCTAssertEqual(viewModel.searchText, "gin")
     
-    await store.receive(
-      .searchResponse(
-        .failure(TheCocktailDbClient.FetchDrinksError.noDataFromResponse)
-      )
-    ) {
-      $0.isLoading = false
-      $0.errorText = "Received no data from response"
+    let expectation1 = XCTestExpectation(description: "call search(query:)")
+    DispatchQueue.global().async {
+      Thread.sleep(forTimeInterval: 0.6)
+      expectation1.fulfill()
     }
+    wait(for: [expectation1], timeout: 1)
+    XCTAssertTrue(testView.startLoadingWasCalled)
+    
+    let expectation2 = XCTestExpectation(description: "fetch drinks from TheCocktailDb")
+    DispatchQueue.global().async {
+      Thread.sleep(forTimeInterval: 0.5)
+      expectation2.fulfill()
+    }
+    wait(for: [expectation2], timeout: 1)
+    
+    XCTAssertFalse(viewModel.isLoading)
+    XCTAssertEqual(viewModel.errorText, "Received no data from response")
   }
   
-  @MainActor
-  func testLoadDrinks_Failure_Decoding() async throws {
-    let mainQueue = DispatchQueue.test
+  func testLoadDrinks_Failure_Decoding() {
+    let testCocktailDb = TheCocktailDbClient.testDecodingFailed
     
-    let store = TestStore(
-      initialState: DrinksFeature.State()
-    ) {
-      DrinksFeature()
-    } withDependencies: {
-      $0.theCocktailDb.fetchDrinks = { _ in
-        throw TheCocktailDbClient.FetchDrinksError.decodingFailed
-      }
-      $0.mainQueue = mainQueue.eraseToAnyScheduler()
+    let testView = TestDrinksView()
+    let mockRouter = MockDrinksRouter()
+    let viewModel = DrinksViewModel(
+      router: mockRouter,
+      theCocktailDb: testCocktailDb
+    )
+    viewModel.view = testView
+    
+    viewModel.searchTextDidChange(searchText: "gin")
+    XCTAssertEqual(viewModel.searchText, "gin")
+    
+    let expectation1 = XCTestExpectation(description: "call search(query:)")
+    DispatchQueue.global().async {
+      Thread.sleep(forTimeInterval: 0.6)
+      expectation1.fulfill()
     }
+    wait(for: [expectation1], timeout: 1)
+    XCTAssertTrue(testView.startLoadingWasCalled)
+    
+    let expectation2 = XCTestExpectation(description: "fetch drinks from TheCocktailDb")
+    DispatchQueue.global().async {
+      Thread.sleep(forTimeInterval: 0.5)
+      expectation2.fulfill()
+    }
+    wait(for: [expectation2], timeout: 1)
+    
+    XCTAssertFalse(viewModel.isLoading)
+    XCTAssertEqual(viewModel.errorText, "Failed decoding JSON")
+  }
+}
 
-    await store.send(.searchTextDidChange("gin"))
-    await mainQueue.advance(by: 0.6)
+extension TheCocktailDbClient {
+  static let testValue = Self { query in
+    var drinks: IdentifiedArrayOf<Drink> = []
+    let emptyRed = Drink(
+      id: "1",
+      name: "Empty Red Wineglass",
+      tagString: "Empty,Wineglass,Test",
+      glass: "Wine glass",
+      category: "Healthy liver",
+      ingredient1: "Red wine",
+      measure1: "0 oz",
+      instructions: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+    )
+    let emptyRose = Drink(
+      id: "2",
+      name: "Empty Rosé Wineglass",
+      tagString: "Empty,Wineglass,Test",
+      glass: "Wine glass",
+      category: "Healthy liver",
+      ingredient1: "Rosé wine",
+      measure1: "0 oz",
+      instructions: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+    )
+    let emptyWhite = Drink(
+      id: "3",
+      name: "Empty White Wineglass",
+      tagString: "Empty,Wineglass,Test",
+      glass: "Wine glass",
+      category: "Healthy liver",
+      ingredient1: "White wine",
+      measure1: "0 oz",
+      instructions: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+    )
+    drinks.append(emptyRed)
+    drinks.append(emptyRose)
+    drinks.append(emptyWhite)
     
-    await store.receive(
-      .search(query: "gin")
-    ) {
-      $0.isLoading = true
-    }
-    
-    await store.receive(
-      .searchResponse(
-        .failure(TheCocktailDbClient.FetchDrinksError.decodingFailed)
-      )
-    ) {
-      $0.isLoading = false
-      $0.errorText = "Failed decoding JSON"
-    }
+    return drinks
+  }
+  
+  static let testEmpty = Self { query in
+    var drinks: IdentifiedArrayOf<Drink> = []
+    return drinks
+  }
+  
+  static let testInvalidUrl = Self { query in
+    throw TheCocktailDbClient.FetchDrinksError.invalidUrl
+  }
+  
+  static let testNoDataFromResponse = Self { query in
+    throw TheCocktailDbClient.FetchDrinksError.noDataFromResponse
+  }
+  
+  static let testDecodingFailed = Self { query in
+    throw TheCocktailDbClient.FetchDrinksError.decodingFailed
   }
 }

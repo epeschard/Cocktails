@@ -6,97 +6,53 @@ import XCTest
 
 class SearchSnapshotTests: XCTestCase {
   
-  @MainActor
   func testSearchDrinksVC_Loaded() {
-    
-    var drinks: IdentifiedArrayOf<Drink> = []
-    let emptyRed = Drink(
-      id: "1",
-      name: "Empty Red Wineglass",
-      tagString: "Empty,Wineglass,Test",
-      glass: "Wine glass",
-      category: "Healthy liver",
-      ingredient1: "Red wine",
-      measure1: "0 oz",
-      instructions: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+    let mockRouter = MockDrinksRouter()
+    let viewModel = DrinksViewModel(
+      router: mockRouter,
+      theCocktailDb: TheCocktailDbClient.testValue
     )
-    let emptyRose = Drink(
-      id: "2",
-      name: "Empty Rosé Wineglass",
-      tagString: "Empty,Wineglass,Test",
-      glass: "Wine glass",
-      category: "Healthy liver",
-      ingredient1: "Rosé wine",
-      measure1: "0 oz",
-      instructions: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
-    )
-    let emptyWhite = Drink(
-      id: "3",
-      name: "Empty White Wineglass",
-      tagString: "Empty,Wineglass,Test",
-      glass: "Wine glass",
-      category: "Healthy liver",
-      ingredient1: "White wine",
-      measure1: "0 oz",
-      instructions: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
-    )
-    drinks.append(emptyRed)
-    drinks.append(emptyRose)
-    drinks.append(emptyWhite)
-    
-    let store = Store(
-      initialState: DrinksFeature.State(
-        searchText: "gin",
-        loadedDrinks: drinks,
-        searchResults: drinks,
-        isLoading: false
-      )
-    ) {
-      DrinksFeature()
-    }
-    let rootVC = DrinksViewController(store: store)
+    let rootVC = DrinksViewController()
+    viewModel.view = rootVC
+    rootVC.viewModel = viewModel
     let nav = UINavigationController(rootViewController: rootVC)
+    
+    viewModel.loadView()
+    viewModel.search(query: "gin")
 
     assertSnapshots(of: nav, as: ["3": .image(on: .iPhone13)])
   }
   
-  func testSearchDrinksVC_Error() {
-    
-    let drinks: IdentifiedArrayOf<Drink> = []
-    
-    let store = Store(
-      initialState: DrinksFeature.State(
-        searchText: "gin",
-        loadedDrinks: drinks,
-        searchResults: drinks,
-        isLoading: false,
-        errorText: "Failed to load"
-      )
-    ) {
-      DrinksFeature()
-    }
-    let rootVC = DrinksViewController(store: store)
+  func testSearchDrinksVC_Error() {    
+    let mockRouter = MockDrinksRouter()
+    let viewModel = DrinksViewModel(
+      router: mockRouter,
+      theCocktailDb: TheCocktailDbClient.testInvalidUrl
+    )
+    let rootVC = DrinksViewController()
+    viewModel.view = rootVC
+    rootVC.viewModel = viewModel
     let nav = UINavigationController(rootViewController: rootVC)
+    
+    viewModel.loadView()
+    viewModel.search(query: "gin")
 
     assertSnapshots(of: nav, as: ["Data": .image(on: .iPhone13)])
   }
   
   func testSearchDrinksVC_Loading() {
-    
-    let drinks: IdentifiedArrayOf<Drink> = []
-    
-    let store = Store(
-      initialState: DrinksFeature.State(
-        searchText: "",
-        loadedDrinks: drinks,
-        searchResults: drinks,
-        isLoading: true
-      )
-    ) {
-      DrinksFeature()
-    }
-    let rootVC = DrinksViewController(store: store)
+    let mockRouter = MockDrinksRouter()
+    let viewModel = DrinksViewModel(
+      router: mockRouter,
+      theCocktailDb: TheCocktailDbClient.testEmpty
+    )
+    let rootVC = DrinksViewController()
+    viewModel.view = rootVC
+    rootVC.viewModel = viewModel
     let nav = UINavigationController(rootViewController: rootVC)
+    
+    viewModel.loadView()
+    viewModel.search(query: "gin")
 
     assertSnapshots(of: nav, as: ["Empty": .image(on: .iPhone13)])
   }

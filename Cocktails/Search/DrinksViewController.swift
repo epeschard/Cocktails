@@ -6,17 +6,15 @@ import UIKit
 let drinkCellIdentifier = "subtitle"
 
 final class DrinksViewController: UITableViewController {
-  let viewStore: ViewStoreOf<DrinksFeature>
-  var cancellables: Set<AnyCancellable> = []
-  
+
+  var viewModel: DrinksViewModel!
   weak var loadingView: UIActivityIndicatorView!
   weak var errorView: UIView!
   var searchController: UISearchController!
   
   //MARK: - Initializers
 
-  init(store: StoreOf<DrinksFeature>) {
-    self.viewStore = ViewStore(store, observe: { $0 })
+  init() {
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -29,28 +27,13 @@ final class DrinksViewController: UITableViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    title = "Cocktails"
-    navigationController?.navigationBar.prefersLargeTitles = true
-
-    setupLoadingView()
-    setupTableView()
-    setupSearchController()
-
-    viewStore.publisher.loadedDrinks
-      .sink(
-        receiveValue: { [weak self] _ in
-          self?.loadingView.stopAnimating()
-          self?.tableView.separatorStyle = .singleLine
-          self?.tableView.reloadData()
-        }
-      )
-      .store(in: &cancellables)
+    viewModel.loadView()
   }
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     
-    if let errorText = viewStore.errorText {
+    if let errorText = viewModel.errorText {
       let errorIcon = UIImage(
         systemName: "exclamationmark.triangle.fill"
       )
@@ -76,12 +59,12 @@ final class DrinksViewController: UITableViewController {
       errorView.distribution = .fillEqually
       tableView.backgroundView = errorView
       self.errorView = errorView
-    } else if viewStore.loadedDrinks.isEmpty {
+    } else if viewModel.loadedDrinks.isEmpty {
       searchController.isActive = true
       DispatchQueue.main.async {
         self.searchController.searchBar.searchTextField.becomeFirstResponder()
       }
-    } else if (viewStore.isLoading) {
+    } else if (viewModel.isLoading) {
       loadingView.startAnimating()
     }
   }
@@ -89,7 +72,7 @@ final class DrinksViewController: UITableViewController {
   //MARK: - UITableViewDataSource
   
   override func numberOfSections(in tableView: UITableView) -> Int {
-    return viewStore.isLoading ? 0 : 1
+    return viewModel.isLoading ? 0 : 1
   }
 
   override func tableView(
@@ -97,9 +80,9 @@ final class DrinksViewController: UITableViewController {
     numberOfRowsInSection section: Int
   ) -> Int {
     if searchController.isActive && searchController.searchBar.text != "" {
-      return viewStore.searchResults.count
+      return viewModel.searchResults.count
     }
-    return viewStore.loadedDrinks.count
+    return viewModel.loadedDrinks.count
   }
 
   override func tableView(
@@ -108,9 +91,9 @@ final class DrinksViewController: UITableViewController {
   ) -> UITableViewCell {
     let drink: Drink
     if searchController.isActive && searchController.searchBar.text != "" {
-      drink = viewStore.searchResults[indexPath.row]
+      drink = viewModel.searchResults[indexPath.row]
     } else {
-      drink = viewStore.loadedDrinks[indexPath.row]
+      drink = viewModel.loadedDrinks[indexPath.row]
     }
     
     var cell: DrinkCell? = tableView.dequeueReusableCell(
@@ -134,14 +117,14 @@ final class DrinksViewController: UITableViewController {
     titleForHeaderInSection section: Int
   ) -> String? {
     if searchController.isActive && searchController.searchBar.text != "" {
-      if viewStore.searchResults.isEmpty {
-        return "Couldn't find drinks with '\(viewStore.searchText)'"
+      if viewModel.searchResults.isEmpty {
+        return "Couldn't find drinks with '\(viewModel.searchText)'"
       } else {
         return nil
       }
     }
-    if viewStore.loadedDrinks.isEmpty {
-      if viewStore.errorText != nil {
+    if viewModel.loadedDrinks.isEmpty {
+      if viewModel.errorText != nil {
         return nil
       }
       return "Start typing to search for drinks"
@@ -157,28 +140,18 @@ final class DrinksViewController: UITableViewController {
   ) {
     let drink: Drink
     if let searchText = searchController.searchBar.text, !searchText.isEmpty {
-      drink = self.viewStore.searchResults[indexPath.row]
+      drink = self.viewModel.searchResults[indexPath.row]
     } else {
-      drink = self.viewStore.loadedDrinks[indexPath.row]
+      drink = self.viewModel.loadedDrinks[indexPath.row]
     }
     
-    let drinkRouter = DetailRouter()
-    let detailViewModel = DetailViewModel(
-      router: drinkRouter,
-      drink: drink
-    )
-    let detail = DetailViewController()
-    detail.viewModel = detailViewModel
-    
-    detailViewModel.view = detail
-    
-    parent?.show(detail, sender: self)
+    viewModel.didSelect(drink, from: parent)
   }
 }
 
 //MARK: - Private
 
-private extension DrinksViewController {
+extension DrinksViewController {
   func setupLoadingView() {
     let loadingView = UIActivityIndicatorView(style: .medium)
     tableView.backgroundView = loadingView
@@ -212,9 +185,9 @@ private extension DrinksViewController {
 extension DrinksViewController: UISearchResultsUpdating {
   func updateSearchResults(for searchController: UISearchController) {
     if let searchText = searchController.searchBar.text, !searchText.isEmpty {
-      viewStore.send(.searchTextDidChange(searchText))
+      viewModel.searchTextDidChange(searchText: searchText)
     } else {
-      viewStore.send(.didClearSearchText)
+      viewModel.didClearSearchText()
     }
     tableView.reloadData()
   }
@@ -230,14 +203,14 @@ extension DrinksViewController: UITableViewDataSourcePrefetching {
     let thumbnailURLs: [URL]
     if let searchText = searchController.searchBar.text, !searchText.isEmpty {
       let thumbnailStrings = indexPaths.compactMap {
-        viewStore.loadedDrinks[$0.row].thumbnail
+        viewModel.loadedDrinks[$0.row].thumbnail
       }
       thumbnailURLs = thumbnailStrings.compactMap {
         URL(string: $0)
       }
     } else {
       let thumbnailStrings = indexPaths.compactMap {
-        viewStore.searchResults[$0.row].thumbnail
+        viewModel.searchResults[$0.row].thumbnail
       }
       thumbnailURLs = thumbnailStrings.compactMap {
         URL(string: $0)

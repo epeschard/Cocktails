@@ -19,11 +19,14 @@ extension SceneDelegate: UIWindowSceneDelegate {
     else { return }
     window = UIWindow(windowScene: windowScene)
     
-    let drinksViewController = DrinksViewController(
-      store: Store(initialState: DrinksFeature.State()) {
-        DrinksFeature()
-      }
+    let router = DrinksRouter()
+    let viewModel = DrinksViewModel(
+      router: router,
+      theCocktailDb: TheCocktailDbClient.liveValue
     )
+    let drinksViewController = DrinksViewController()
+    viewModel.view = drinksViewController
+    drinksViewController.viewModel = viewModel
 
     window?.rootViewController = UINavigationController(
       rootViewController: drinksViewController

@@ -31,9 +31,7 @@ class DetailSnapshotTests: XCTestCase {
     assertSnapshots(of: nav, as: ["iPhone13ProMax": .image(on: .iPhone13ProMax)])
   }
   
-  func testDetailViewController_withVideoURL() {
-    let mainQueue = DispatchQueue.test
-    
+  func testDetailViewController_withVideoURL() {    
     let drink = Drink(
       id: "1",
       name: "Empty Wineglass",
