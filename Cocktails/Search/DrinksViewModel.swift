@@ -71,15 +71,11 @@ class DrinksViewModel {
       
       // Filter only the drinks matching the query
       if !searchText.isEmpty {
-        print("searchText is not empty")
         searchResults = loadedDrinks.filter {
           $0.name.lowercased().contains(searchText.lowercased())
         }
-        print("searchResults has \(searchResults.count) drinks")
       } else {
-        print("searchText is empty")
         searchResults = loadedDrinks
-        print("searchResults has \(searchResults.count) drinks")
       }
   
       errorText = nil

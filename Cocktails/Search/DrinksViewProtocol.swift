@@ -42,42 +42,7 @@ extension DrinksViewController: DrinksViewProtocol {
   }
 }
 
-//import XCTest
-
 class TestDrinksView: DrinksViewProtocol {
-/*
-  //  var expectation1: XCTestExpectation
-//  var expectation2: XCTestExpectation
-  var expectation3: XCTestExpectation!
-  var expectation4: XCTestExpectation!
-  var expectation5: XCTestExpectation!
-  var expectation6: XCTestExpectation!
-  /*
-  init(
-//    expectation1: XCTestExpectation,
-//    expectation2: XCTestExpectation,
-    expectation3: XCTestExpectation,
-    expectation4: XCTestExpectation,
-    expectation5: XCTestExpectation,
-    expectation6: XCTestExpectation,
-    didLoadViewWasCalled: Bool = false,
-    didFetchDrinksWasCalled: Bool = false,
-    startLoadingWasCalled: Bool = false,
-    finishLoadingWasCalled: Bool = false
-  ) {
-//    self.expectation1 = expectation1
-//    self.expectation2 = expectation2
-    self.expectation3 = expectation3
-    self.expectation4 = expectation4
-    self.expectation5 = expectation5
-    self.expectation6 = expectation6
-    self.didLoadViewWasCalled = didLoadViewWasCalled
-    self.didFetchDrinksWasCalled = didFetchDrinksWasCalled
-    self.startLoadingWasCalled = startLoadingWasCalled
-    self.finishLoadingWasCalled = finishLoadingWasCalled
-  }
-  */
-*/
   var didLoadViewWasCalled = false
   func didLoadView() {
     didLoadViewWasCalled = true
@@ -90,7 +55,6 @@ class TestDrinksView: DrinksViewProtocol {
   
   var startLoadingWasCalled = false
   func startLoading() {
-//    expectation3.fulfill()
     startLoadingWasCalled = true
   }
   
