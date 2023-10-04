@@ -91,7 +91,7 @@ class DrinksViewModel {
     searchResults = []
   }
   
-  func didSelect(_ drink: Drink, from parent: UIViewController?) {
-    router.didSelect(drink, from: parent)
+  func didSelect(_ drink: Drink, from parent: UIViewController?, sender: Any?) {
+    router.didSelect(drink, from: parent, sender: sender)
   }
 }

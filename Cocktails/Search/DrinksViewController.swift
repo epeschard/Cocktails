@@ -138,7 +138,7 @@ final class DrinksViewController: UITableViewController {
       drink = self.viewModel.loadedDrinks[indexPath.row]
     }
     
-    viewModel.didSelect(drink, from: parent)
+    viewModel.didSelect(drink, from: parent, sender: self)
   }
 }
 
