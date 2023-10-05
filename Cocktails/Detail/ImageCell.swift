@@ -3,7 +3,7 @@ import UIKit
 
 final class ImageCell: UITableViewCell {
   
-  var poster = UIImageView()
+  var poster: UIImageView!
   var attribution = UILabel()
   var creativeCommons = UIImageView()
   
@@ -32,12 +32,16 @@ final class ImageCell: UITableViewCell {
       style: style,
       reuseIdentifier: reuseIdentifier ?? Self.reuseIdentifier
     )
-    
+  }
+   
+  func setupViews() {
+    let poster = UIImageView()
     poster.translatesAutoresizingMaskIntoConstraints = false
     poster.contentMode = .scaleAspectFit
     attribution.translatesAutoresizingMaskIntoConstraints = false
     attribution.font = UIFont.preferredFont(forTextStyle: .body)
     creativeCommons.translatesAutoresizingMaskIntoConstraints = false
+    self.poster = poster
           
     // Add the UI components
     contentView.addSubview(poster)
@@ -66,18 +70,23 @@ final class ImageCell: UITableViewCell {
   }
   
   func configure(with drink: Drink) {
-    let placeholderImage = UIImage(systemName: "wineglass")
-    if let string = drink.thumbnail, let thumbnailURL = URL(string: string) {
-      poster.sd_setImage(
-        with: thumbnailURL,
-        placeholderImage: placeholderImage
-      )
-    } else {
-      poster.image = placeholderImage
-    }
     attribution.text = drink.strImageAttribution ?? ""
     creativeCommons.image = UIImage(named: "cc-sticker")
     creativeCommons.isHidden = drink.strCreativeCommonsConfirmed == nil
+    
+    let placeholderImage = UIImage(systemName: "wineglass")
+    guard
+      let string = drink.thumbnail,
+      let thumbnailURL = URL(string: string)
+    else {
+      poster.image = placeholderImage
+      poster.sizeToFit()
+      return
+    }
+    poster.sd_setImage(
+      with: thumbnailURL,
+      placeholderImage: placeholderImage
+    )
     poster.sizeToFit()
   }
   

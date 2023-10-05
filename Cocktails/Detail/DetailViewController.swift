@@ -7,7 +7,7 @@ final class DetailViewController: UIViewController {
   let viewStore: ViewStoreOf<DetailFeature>
   var cancellables: Set<AnyCancellable> = []
   var tableView: UITableView!
-  var imageView: UIImageView!
+  var imageView = UIImageView()
   
   //MARK: - Initializers
 
@@ -30,7 +30,7 @@ final class DetailViewController: UIViewController {
     
     setupTableView()
     
-    viewStore.publisher.drink //Feature
+    viewStore.publisher.drink
       .sink(
         receiveValue: { [weak self] _ in
           self?.tableView.reloadData()
@@ -129,6 +129,7 @@ extension DetailViewController: UITableViewDataSource {
     case 0:
       switch indexPath.row {
       case 0:
+        imageCell.setupViews()
         imageCell.configure(with: drink)
         return imageCell
       case 1:
