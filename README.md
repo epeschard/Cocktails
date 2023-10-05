@@ -8,7 +8,7 @@ The application has 2 pages. Firstly, a start page to search against the API and
 are returned and displayed, the user can click on one of the rows to go to a detail page with the details of the recipe.
 <br>
 The app also works offline using data cached from previous searches.
-[![Screen shots of the app](screenshots.png)]
+![Screen shots of the app](screenshots.png)
 
 <br><br>
 Some things you might find interesting:

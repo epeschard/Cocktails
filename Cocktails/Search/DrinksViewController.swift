@@ -169,8 +169,11 @@ final class DrinksViewController: UITableViewController {
         DetailFeature()
       }
     )
-    
-    parent?.show(detail, sender: self)
+    navigationController?.delegate = self
+    navigationController?.pushViewController(
+      detail,
+      animated: true
+    )
   }
 }
 
