@@ -56,10 +56,10 @@ final class DrinkCell: UITableViewCell {
       thumb.heightAnchor.constraint(equalToConstant: 50),
       title.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
       title.leadingAnchor.constraint(equalTo: thumb.trailingAnchor, constant: 8),
-      title.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+      title.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -8),
       instructions.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 8),
       instructions.leadingAnchor.constraint(equalTo: title.leadingAnchor),
-      instructions.trailingAnchor.constraint(equalTo: title.trailingAnchor),
+      instructions.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
       instructions.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
     ])
   }
@@ -83,8 +83,6 @@ final class DrinkCell: UITableViewCell {
     instructions.text = drink.instructions
     
     thumb.sizeToFit()
-    title.sizeToFit()
-    instructions.sizeToFit()
   }
   
   required init?(coder: NSCoder) {

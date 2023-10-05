@@ -4,7 +4,7 @@ class HeroPopTransition: NSObject, UIViewControllerAnimatedTransitioning {
   func transitionDuration(
     using transitionContext: UIViewControllerContextTransitioning?
   ) -> TimeInterval {
-    return 5 //0.3
+    return 0.3
   }
 
   func animateTransition(
@@ -12,8 +12,26 @@ class HeroPopTransition: NSObject, UIViewControllerAnimatedTransitioning {
   ) {
     guard
       let fromVC = transitionContext.viewController(forKey: .from) as? DetailViewController,
-      let toVC = transitionContext.viewController(forKey: .to) as? DrinksViewController
+      let fromNavBar = fromVC.navigationController?.navigationBar,
+      let toVC = transitionContext.viewController(forKey: .to) as? DrinksViewController,
+      let toNavBar = toVC.navigationController?.navigationBar,
+      // This code digs into the internal subviews of UINavigationBar and
+      // searches for a view with a specific name. Apple's internal view
+      // hierarchy and naming conventions are not guaranteed to stay the
+      // same across iOS versions. This means that this approach can break
+      // with new iOS updates.
+      let toLargeTitle = toNavBar.subviews.first(
+        where: {
+          String(describing: type(of: $0)) == "_UINavigationBarLargeTitleView"
+        }
+      ),
+      let fromLargeTitle = fromNavBar.subviews.first(
+        where: {
+          String(describing: type(of: $0)) == "_UINavigationBarLargeTitleView"
+        }
+      )
     else {
+      transitionContext.completeTransition(false)
       return
     }
             
@@ -21,7 +39,15 @@ class HeroPopTransition: NSObject, UIViewControllerAnimatedTransitioning {
           
     let fromTableView: UITableView = fromVC.tableView
     let toTableView: UITableView = toVC.tableView
-    let firstIndexPath = IndexPath(row: 0, section: 0)
+    
+    
+    var firstImageCell: ImageCell? = nil
+    for cell in fromTableView.visibleCells {
+      if let imageCell = cell as? ImageCell {
+        firstImageCell = imageCell
+        break
+      }
+    }
             
     guard
       let selectedIndexPath = toTableView.indexPathForSelectedRow,
@@ -29,15 +55,20 @@ class HeroPopTransition: NSObject, UIViewControllerAnimatedTransitioning {
         at: selectedIndexPath
       ),
       let drinkCell: DrinkCell = selectedCell as? DrinkCell,
-      let fromFirstCell: UITableViewCell = fromTableView.cellForRow(
-        at: firstIndexPath
-      ),
-      let imageCell: ImageCell = fromFirstCell as? ImageCell
+      let imageCell = firstImageCell
     else {
+      transitionContext.completeTransition(false)
       return
     }
     let fromImageView: UIImageView = imageCell.poster
     let toImageView: UIImageView = drinkCell.thumb
+    let toTitleLabel: UILabel = drinkCell.title
+    
+    let fromLargeTitleFrameInNavigationBar = fromLargeTitle.frame
+    let fromLargeTitleFrameInViewControllerView = fromNavBar.convert(
+      fromLargeTitleFrameInNavigationBar,
+      to: fromVC.view
+    )
             
     // Create a snapshot of the cell's image view
     let imageSnapshot = fromImageView.snapshotView(afterScreenUpdates: false)!
@@ -46,27 +77,38 @@ class HeroPopTransition: NSObject, UIViewControllerAnimatedTransitioning {
       from: fromImageView.superview
     )
     fromImageView.isHidden = true
+    
+    // Create a snapshot of the LargeTitle's label
+    let titleSnapshot = fromLargeTitle.snapshotView(afterScreenUpdates: false)!
+    titleSnapshot.frame = containerView.convert(
+      fromLargeTitle.frame,
+      from: fromLargeTitle.superview
+    )
+    fromLargeTitle.isHidden = true
             
     // Set initial state for the destination view controller (it starts off-screen)
     toVC.view.frame = transitionContext.finalFrame(for: toVC)
     toVC.view.alpha = 0
     fromImageView.isHidden = true
-    
-    let fromImageFrame: CGRect
-    if fromImageView.frame == CGRect.zero {
-      fromImageFrame = CGRect(
-        x: 20.0,
-        y: 150,
-        width: fromTableView.bounds.width - 40,
-        height: fromTableView.bounds.width - 40
-      )
-    } else {
-      fromImageFrame = fromImageView.frame
+    fromLargeTitle.isHidden = false
+    if toVC.searchController.isActive {
+      toLargeTitle.isHidden = true
     }
+    toTitleLabel.isHidden = true
             
     containerView.addSubview(toVC.view)
     containerView.addSubview(imageSnapshot)
-            
+    containerView.addSubview(titleSnapshot)
+    
+    let toImageFrame = containerView.convert(
+      toImageView.frame,
+      from: toImageView.superview
+    )
+    let toTitleFrame = containerView.convert(
+      toTitleLabel.frame,
+      from: toTitleLabel.superview
+    )
+    
     // Animate
     let duration = transitionDuration(using: transitionContext)
     UIView.animate(
@@ -77,14 +119,21 @@ class HeroPopTransition: NSObject, UIViewControllerAnimatedTransitioning {
           toImageView.frame,
           from: toImageView.superview
         )
+        titleSnapshot.frame = containerView.convert(
+          toTitleLabel.frame,
+          from: toTitleLabel.superview
+        )
       },
       completion: { _ in
         toImageView.isHidden = false
         fromImageView.isHidden = false
         imageSnapshot.removeFromSuperview()
+        titleSnapshot.removeFromSuperview()
         transitionContext.completeTransition(
           !transitionContext.transitionWasCancelled
         )
+        toLargeTitle.isHidden = false
+        toTitleLabel.isHidden = false
       }
     )
   }

@@ -4,7 +4,7 @@ class HeroPushTransition: NSObject, UIViewControllerAnimatedTransitioning {
   func transitionDuration(
     using transitionContext: UIViewControllerContextTransitioning?
   ) -> TimeInterval {
-    return 1 //0.3
+    return 0.3
   }
 
   func animateTransition(
@@ -14,6 +14,7 @@ class HeroPushTransition: NSObject, UIViewControllerAnimatedTransitioning {
       let fromVC = transitionContext.viewController(forKey: .from) as? DrinksViewController,
       let toVC = transitionContext.viewController(forKey: .to) as? DetailViewController
     else {
+      transitionContext.completeTransition(false)
       return
     }
             
@@ -30,9 +31,11 @@ class HeroPushTransition: NSObject, UIViewControllerAnimatedTransitioning {
       ),
       let drinkCell: DrinkCell = selectedCell as? DrinkCell
     else {
+      transitionContext.completeTransition(false)
       return
     }
     let fromImageView: UIImageView = drinkCell.thumb
+    let fromTitle: UILabel = drinkCell.title
             
     // Create a snapshot of the cell's image view
     let imageSnapshot = fromImageView.snapshotView(afterScreenUpdates: false)!
@@ -41,31 +44,39 @@ class HeroPushTransition: NSObject, UIViewControllerAnimatedTransitioning {
       from: fromImageView.superview
     )
     fromImageView.isHidden = true
+    
+    // Create a snapshot of the cell's title label
+    let titleSnapshot = fromTitle.snapshotView(afterScreenUpdates: false)!
+    titleSnapshot.frame = containerView.convert(
+      fromTitle.frame,
+      from: fromTitle.superview
+    )
+    fromTitle.isHidden = true
             
     // Set initial state for the destination view controller (it starts off-screen)
     toVC.view.frame = transitionContext.finalFrame(for: toVC)
-    print("toVC.view.frame: \(toVC.view.frame)")
     toVC.view.alpha = 0
     toImageView.isHidden = true
     
+    //TODO: calculate frame instead of hardcoding
     let toImageFrame: CGRect
     if toImageView.frame == CGRect.zero {
-      print("toTableView.bounds: \(toTableView.bounds)")
-      print("fromTableView.bounds: \(fromTableView.bounds)")
       toImageFrame = CGRect(
         x: 20.0,
-        y: 150, //-tableView.bounds.origin.y,
+        y: 150,
         width: toTableView.bounds.width - 40,
         height: toTableView.bounds.width - 40
       )
-      print("toImageFrame: \(toImageFrame)")
-      print("should be:    (20.0, 150.0, 353.0, 353.0")
     } else {
       toImageFrame = toImageView.frame
     }
-            
+    let toImageFrameConvert = containerView.convert(
+      toImageView.frame,
+      to: toImageView.superview
+    )
     containerView.addSubview(toVC.view)
     containerView.addSubview(imageSnapshot)
+    containerView.addSubview(titleSnapshot)
             
     // Animate
     let duration = transitionDuration(using: transitionContext)
@@ -77,17 +88,23 @@ class HeroPushTransition: NSObject, UIViewControllerAnimatedTransitioning {
           toImageFrame,
           from: toImageView.superview
         )
-      }, 
+        titleSnapshot.frame = CGRect(
+          x: 16,
+          y: 104,
+          width: 124,
+          height: 41
+        )
+      },
       completion: { _ in
         toImageView.isHidden = false
         fromImageView.isHidden = false
         imageSnapshot.removeFromSuperview()
+        titleSnapshot.removeFromSuperview()
         transitionContext.completeTransition(
           !transitionContext.transitionWasCancelled
         )
       }
     )
-//    print("finished animation")
   }
 }
 
@@ -105,7 +122,6 @@ extension DrinksViewController: UINavigationControllerDelegate {
       return HeroPushTransition()
       
     case .pop:
-      print("Pop transition is not handled")
       return HeroPopTransition()
       
     case .none:
