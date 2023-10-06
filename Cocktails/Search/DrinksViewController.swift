@@ -51,14 +51,6 @@ final class DrinksViewController: UITableViewController {
     super.viewWillAppear(animated)
     
     if let errorText = viewStore.errorText {
-      let errorIcon = UIImage(
-        systemName: "exclamationmark.triangle.fill"
-      )
-      let errorImage = UIImageView(
-        frame: CGRect(x: 0, y: 0, width: 50, height: 50)
-      )
-      errorImage.contentMode = .scaleAspectFit
-      errorImage.image = errorIcon
       let errorTitle = UILabel()
       errorTitle.text = "ERROR"
       errorTitle.font = UIFont.preferredFont(forTextStyle: .largeTitle)
@@ -68,7 +60,6 @@ final class DrinksViewController: UITableViewController {
       let errorView = UIStackView(
         arrangedSubviews: [
           UIView(),
-//          errorImage,
           errorTitle,
           errorLabel,
           UIView()
@@ -79,13 +70,13 @@ final class DrinksViewController: UITableViewController {
       errorView.distribution = .fillEqually
       tableView.backgroundView = errorView
       self.errorView = errorView
+    } else if (viewStore.isLoading) {
+      loadingView.startAnimating()
     } else if viewStore.loadedDrinks.isEmpty {
       searchController.isActive = true
       DispatchQueue.main.async {
         self.searchController.searchBar.searchTextField.becomeFirstResponder()
       }
-    } else if (viewStore.isLoading) {
-      loadingView.startAnimating()
     }
   }
   
