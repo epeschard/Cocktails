@@ -1,27 +1,23 @@
-name: Build and Test
+name: Build & Test
 
 on:
   push:
     branches:
-      -main
-  pull_request:
-    branches: 
-      -main
+      - badges
 
 jobs:
   build:
     name: Build and Test
-    runs-on: macos-latest
-
+    runs-on: macOS-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set up Xcode version
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: '15.0'
-
-      - name: Build and Test
-        run: |
-          xcodebuild -workspace 'Cocktails.xcworkspace' -scheme 'Cocktails' -destination 'platform=iOS Simulator,name=iPhone 13' test
+    - name: Check out code
+      uses: actions/checkout@v2
+      
+    - name: Set up Xcode version
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '13.0'
+        
+    - name: Build and Test
+      run: |
+        xcodebuild test -workspace Cocktails.xcworkspace -scheme CocktailsTests -destination 'platform=iOS Simulator,name=iPhone 13'
