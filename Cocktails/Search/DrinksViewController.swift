@@ -182,7 +182,9 @@ private extension DrinksViewController {
   }
   
   func setupTableView() {
-    tableView.isPrefetchingEnabled = true
+    if #available(iOS 15.0, *) {
+      tableView.isPrefetchingEnabled = true
+    }
     tableView.prefetchDataSource = self
     
     tableView.register(
