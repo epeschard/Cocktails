@@ -1,4 +1,4 @@
-name: Checkout & Setup Xcode version
+name: Build & Test
 
 on:
   push:
@@ -18,3 +18,13 @@ jobs:
       with:
         xcode-version: latest-stable
 
+    - name: Install SPM Dependencies
+      run: swift build
+
+    - name: Build and Test
+      run: |
+        xcodebuild test 
+          -project Cocktails.xcodeproj \
+          -scheme CocktailsTests \
+          -destination "platform=iOS Simulator,name=iPhone 11" \
+            clean test | xcpretty
