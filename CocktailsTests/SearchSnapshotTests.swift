@@ -8,6 +8,7 @@ class SearchSnapshotTests: XCTestCase {
   
   @MainActor
   func testSearchDrinksVC_Loaded() {
+    let mainQueue = DispatchQueue.test
     
     var drinks: IdentifiedArrayOf<Drink> = []
     let emptyRed = Drink(
@@ -46,22 +47,27 @@ class SearchSnapshotTests: XCTestCase {
     
     let store = Store(
       initialState: DrinksFeature.State(
-        searchText: "gin",
+        searchText: "win",
         loadedDrinks: drinks,
         searchResults: drinks,
         isLoading: false
       )
     ) {
       DrinksFeature()
+    } withDependencies: {
+      $0.mainQueue = mainQueue.eraseToAnyScheduler()
     }
     let rootVC = DrinksViewController(store: store)
     let nav = UINavigationController(rootViewController: rootVC)
 
-    assertSnapshots(of: nav, as: ["3": .image(on: .iPhone13)])
+    assertSnapshots(
+      of: nav,
+      as: ["3": .image(on: .iPhone13)]
+    )
   }
   
   func testSearchDrinksVC_Error() {
-    
+    let mainQueue = DispatchQueue.test
     let drinks: IdentifiedArrayOf<Drink> = []
     
     let store = Store(
@@ -74,6 +80,8 @@ class SearchSnapshotTests: XCTestCase {
       )
     ) {
       DrinksFeature()
+    } withDependencies: {
+      $0.mainQueue = mainQueue.eraseToAnyScheduler()
     }
     let rootVC = DrinksViewController(store: store)
     let nav = UINavigationController(rootViewController: rootVC)
@@ -82,7 +90,7 @@ class SearchSnapshotTests: XCTestCase {
   }
   
   func testSearchDrinksVC_Loading() {
-    
+    let mainQueue = DispatchQueue.test
     let drinks: IdentifiedArrayOf<Drink> = []
     
     let store = Store(
@@ -94,6 +102,8 @@ class SearchSnapshotTests: XCTestCase {
       )
     ) {
       DrinksFeature()
+    } withDependencies: {
+      $0.mainQueue = mainQueue.eraseToAnyScheduler()
     }
     let rootVC = DrinksViewController(store: store)
     let nav = UINavigationController(rootViewController: rootVC)
