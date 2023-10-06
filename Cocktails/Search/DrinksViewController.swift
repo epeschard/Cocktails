@@ -54,7 +54,10 @@ final class DrinksViewController: UITableViewController {
       let errorIcon = UIImage(
         systemName: "exclamationmark.triangle.fill"
       )
-      let errorImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+      let errorImage = UIImageView(
+        frame: CGRect(x: 0, y: 0, width: 50, height: 50)
+      )
+      errorImage.contentMode = .scaleAspectFit
       errorImage.image = errorIcon
       let errorTitle = UILabel()
       errorTitle.text = "ERROR"
