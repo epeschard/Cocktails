@@ -1,4 +1,4 @@
-name: Checkout
+name: Checkout & Setup Xcode version
 
 on:
   push:
@@ -12,3 +12,9 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v3
+            
+    - name: Set up Xcode version
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+
