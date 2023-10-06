@@ -13,10 +13,11 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v3
             
+    - name: Install SPM Dependencies
+      run: swift build
+
     - name: Set up Xcode version
       uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: latest-stable
 
-    - name: Install SPM Dependencies
-      run: swift build
