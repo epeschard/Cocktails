@@ -1,4 +1,7 @@
 # Cocktails
+![tests workflow](https://github.com/epeschard/Cocktails/actions/workflows/main.yml/badge.svg)
+![develop workflow](https://github.com/epeschard/Cocktails/actions/workflows/main.yml/badge.svg?branch=develop)
+![develop workflow](https://github.com/epeschard/Cocktails/actions/workflows/main.yml/badge.svg?event=push)
 
 This repo contains the full source code for *Cocktails*, an iOS app to search cocktail recipes.
 <br>
