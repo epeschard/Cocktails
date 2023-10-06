@@ -7,6 +7,8 @@ import XCTest
 class DetailSnapshotTests: XCTestCase {
   
   func testDetailViewController() {
+    let mainQueue = DispatchQueue.test
+
     let drink = Drink(
       id: "1",
       name: "Empty Wineglass",
@@ -24,6 +26,8 @@ class DetailSnapshotTests: XCTestCase {
       )
     ) {
       DetailFeature()
+    } withDependencies: {
+      $0.mainQueue = mainQueue.eraseToAnyScheduler()
     }
     
     let rootVC = DetailViewController(store: store)
@@ -53,6 +57,8 @@ class DetailSnapshotTests: XCTestCase {
       )
     ) {
       DetailFeature()
+    } withDependencies: {
+      $0.mainQueue = mainQueue.eraseToAnyScheduler()
     }
     
     let rootVC = DetailViewController(store: store)

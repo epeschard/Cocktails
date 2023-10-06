@@ -65,10 +65,6 @@ class HeroPopTransition: NSObject, UIViewControllerAnimatedTransitioning {
     let toTitleLabel: UILabel = drinkCell.title
     
     let fromLargeTitleFrameInNavigationBar = fromLargeTitle.frame
-    let fromLargeTitleFrameInViewControllerView = fromNavBar.convert(
-      fromLargeTitleFrameInNavigationBar,
-      to: fromVC.view
-    )
             
     // Create a snapshot of the cell's image view
     let imageSnapshot = fromImageView.snapshotView(afterScreenUpdates: false)!
@@ -99,15 +95,6 @@ class HeroPopTransition: NSObject, UIViewControllerAnimatedTransitioning {
     containerView.addSubview(toVC.view)
     containerView.addSubview(imageSnapshot)
     containerView.addSubview(titleSnapshot)
-    
-    let toImageFrame = containerView.convert(
-      toImageView.frame,
-      from: toImageView.superview
-    )
-    let toTitleFrame = containerView.convert(
-      toTitleLabel.frame,
-      from: toTitleLabel.superview
-    )
     
     // Animate
     let duration = transitionDuration(using: transitionContext)
