@@ -20,8 +20,10 @@ jobs:
 
     - name: Build and Test
       run: |
-        xcodebuild clean build 
+        xcodebuild 
           -project Cocktails.xcodeproj \
           -scheme CocktailsTests \
           -destination 'platform=iOS Simulator,name=iPhone 12' \
-          -verbose
+          -allowProvisioningUpdates \
+          -verbose \
+          clean biuild test
