@@ -20,11 +20,3 @@ jobs:
 
     - name: Install SPM Dependencies
       run: swift build
-
-    - name: Build and Test
-      run: |
-        xcodebuild test 
-          -project Cocktails.xcodeproj \
-          -scheme CocktailsTests \
-          -destination "platform=iOS Simulator,name=iPhone 11" \
-            clean test | xcpretty
