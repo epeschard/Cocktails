@@ -15,7 +15,7 @@ Some things you might find interesting:
 
 ### The Composable Architecture
 
-The whole application is powered by the [Composable Architecture](https://github.com/pointfreeco/swift-composable-architecture), a library we built from scratch on [Point-Free](https://www.pointfree.co/collections/composable-architecture) that provides tools for building applications with a focus on composability, modularity, and testability. This means:
+The whole application is powered by the [Composable Architecture](https://github.com/pointfreeco/swift-composable-architecture), a library built from scratch by [Brandon Williams](https://twitter.com/mbrandonw) and [Stephen Celis](https://twitter.com/stephencelis) on [Point-Free](https://www.pointfree.co/collections/composable-architecture) that provides tools for building applications with a focus on composability, modularity, and testability. This means:
 
 * The entire app's state is held in a single source of truth, called a `Store`.
 * The entire app's behavior is implemented by a single unit, called a `Reducer`, which is composed out of many other reducers.
