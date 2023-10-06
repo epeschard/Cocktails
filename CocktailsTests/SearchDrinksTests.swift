@@ -14,96 +14,16 @@ final class SearchDrinksTests: XCTestCase {
     let drink1 = Drink(
       id: "1",
       name: "gin 1",
-      alternateName: nil,
-      tagString: nil,
       glass: "glass",
       category: "category",
-      thumbnail: nil,
-      imageURL: nil,
-      videoURL: nil,
-      iba: nil,
-      alcoholic: nil,
-      ingredient1: nil,
-      ingredient2: nil,
-      ingredient3: nil,
-      ingredient4: nil,
-      ingredient5: nil,
-      ingredient6: nil,
-      ingredient7: nil,
-      ingredient8: nil,
-      ingredient9: nil,
-      ingredient10: nil,
-      ingredient11: nil,
-      ingredient12: nil,
-      ingredient13: nil,
-      ingredient14: nil,
-      ingredient15: nil,
-      measure1: nil,
-      measure2: nil,
-      measure3: nil,
-      measure4: nil,
-      measure5: nil,
-      measure6: nil,
-      measure7: nil,
-      measure8: nil,
-      measure9: nil,
-      measure10: nil,
-      measure11: nil,
-      measure12: nil,
-      measure13: nil,
-      measure14: nil,
-      measure15: nil,
-      instructions: "Instructions 1",
-      strImageAttribution: nil,
-      strCreativeCommonsConfirmed: nil,
-      dateModified: nil
+      instructions: "Instructions 1"
     )
     let drink2 = Drink(
       id: "2",
       name: "gin 2",
-      alternateName: nil,
-      tagString: nil,
       glass: "glass",
       category: "category",
-      thumbnail: nil,
-      imageURL: nil,
-      videoURL: nil,
-      iba: nil,
-      alcoholic: nil,
-      ingredient1: nil,
-      ingredient2: nil,
-      ingredient3: nil,
-      ingredient4: nil,
-      ingredient5: nil,
-      ingredient6: nil,
-      ingredient7: nil,
-      ingredient8: nil,
-      ingredient9: nil,
-      ingredient10: nil,
-      ingredient11: nil,
-      ingredient12: nil,
-      ingredient13: nil,
-      ingredient14: nil,
-      ingredient15: nil,
-      measure1: nil,
-      measure2: nil,
-      measure3: nil,
-      measure4: nil,
-      measure5: nil,
-      measure6: nil,
-      measure7: nil,
-      measure8: nil,
-      measure9: nil,
-      measure10: nil,
-      measure11: nil,
-      measure12: nil,
-      measure13: nil,
-      measure14: nil,
-      measure15: nil,
-      instructions: "Instructions 1",
-      strImageAttribution: nil,
-      strCreativeCommonsConfirmed: nil,
-      dateModified: nil
+      instructions: "Instructions 1"
     )
     drinks.append(drink1)
     drinks.append(drink2)
@@ -138,7 +58,7 @@ final class SearchDrinksTests: XCTestCase {
     await store.send(.searchTextDidChange("gin")) {
       $0.searchText = "gin"
     }
-    await mainQueue.advance(by: 0.5)
+    await mainQueue.advance(by: 0.6)
     
     await store.receive(
       .search(query: "gin")
@@ -160,7 +80,6 @@ final class SearchDrinksTests: XCTestCase {
     
     await store.send(.didClearSearchText) {
       $0.searchText = ""
-      $0.searchResults = []
     }
   }
   

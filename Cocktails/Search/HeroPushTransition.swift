@@ -70,10 +70,6 @@ class HeroPushTransition: NSObject, UIViewControllerAnimatedTransitioning {
     } else {
       toImageFrame = toImageView.frame
     }
-    let toImageFrameConvert = containerView.convert(
-      toImageView.frame,
-      to: toImageView.superview
-    )
     containerView.addSubview(toVC.view)
     containerView.addSubview(imageSnapshot)
     containerView.addSubview(titleSnapshot)
