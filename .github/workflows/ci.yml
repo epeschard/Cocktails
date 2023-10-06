@@ -1,0 +1,23 @@
+name: Build & Test
+
+on:
+  push:
+    branches:
+      -main
+  pull_request:
+    branches: 
+      -main
+
+jobs:
+  build:
+    name: Build and Test default scheme using any available iPhone simulator
+    runs-on: macos-latest
+
+    steps:
+      - name: Test Coverage
+        run: swift test --enable-code-coverage
+
+      - name: Test coverage
+        uses: maxep/spm-lcov-action@0.3.0
+        with:
+          output-file: ./coverage/lcov.info

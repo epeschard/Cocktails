@@ -8,6 +8,7 @@ struct DrinksFeature: Reducer {
     var searchResults: IdentifiedArrayOf<Drink> = []
     var isLoading: Bool = false
     var errorText: String? = nil
+    @PresentationState var showDetail: DetailFeature.State?
   }
 
   enum Action: Equatable {
@@ -15,6 +16,8 @@ struct DrinksFeature: Reducer {
     case search(query: String)
     case searchResponse(TaskResult<IdentifiedArrayOf<Drink>>)
     case didClearSearchText
+    case selectedDrink(Drink.ID)
+    case showDetail(PresentationAction<DetailFeature.Action>)
   }
   
   @Dependency(\.theCocktailDb) var theCocktailDb
@@ -55,7 +58,6 @@ struct DrinksFeature: Reducer {
 
       case .didClearSearchText:
         state.searchText = ""
-        state.searchResults = []
         return .none
 
       case .searchResponse(.success(let loadedDrinks)):
@@ -82,8 +84,23 @@ struct DrinksFeature: Reducer {
         state.isLoading = false
         state.errorText = error.localizedDescription
         return .none
+        
+      case .selectedDrink(let drinkID):
+        if let drink = state.loadedDrinks[id: drinkID] {
+          let drinkDetailState = DetailFeature.State(drink: drink)
+          state.showDetail = drinkDetailState
+        }
+        return .none
+        
+      case .showDetail:
+        return .none
       }
     }
+    .ifLet(
+      \.$showDetail,
+       action: /Action.showDetail) {
+         DetailFeature()
+       }
 //    ._printChanges()
   }
 }

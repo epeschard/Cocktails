@@ -45,6 +45,33 @@ final class DrinksViewController: UITableViewController {
         }
       )
       .store(in: &cancellables)
+    
+    viewStore.publisher.showDetail
+      .sink(
+        receiveValue: { [weak self] detailState in
+          guard let self = self else { return }
+          
+          if let detailState = detailState {
+            let detail = DetailViewController(
+              store: Store(
+                initialState: detailState
+              ) {
+                DetailFeature()
+              }
+            )
+            self.navigationController?.delegate = self
+            self.navigationController?.pushViewController(
+              detail,
+              animated: true
+            )
+          }
+        }
+      )
+      .store(in: &cancellables)
+    
+    viewStore.send(
+      .searchTextDidChange("gin")
+    )
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -155,19 +182,7 @@ final class DrinksViewController: UITableViewController {
     } else {
       drink = self.viewStore.loadedDrinks[indexPath.row]
     }
-    
-    let detail = DetailViewController(
-      store: Store(
-        initialState: DetailFeature.State(drink: drink)
-      ) {
-        DetailFeature()
-      }
-    )
-    navigationController?.delegate = self
-    navigationController?.pushViewController(
-      detail,
-      animated: true
-    )
+    viewStore.send(.selectedDrink(drink.id))
   }
 }
 
