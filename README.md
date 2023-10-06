@@ -1,7 +1,10 @@
 # Cocktails
-![tests workflow](https://github.com/epeschard/Cocktails/actions/workflows/main.yml/badge.svg)
-![develop workflow](https://github.com/epeschard/Cocktails/actions/workflows/main.yml/badge.svg?branch=develop)
-![develop workflow](https://github.com/epeschard/Cocktails/actions/workflows/main.yml/badge.svg?event=push)
+![tests main](https://github.com/epeschard/Cocktails/actions/workflows/ios.yml/badge.svg)
+![tests develop](https://github.com/epeschard/Cocktails/actions/workflows/ios.yml/badge.svg?branch=develop)
+![tests push](https://github.com/epeschard/Cocktails/actions/workflows/ios.yml/badge.svg?event=push)
+![b&a main](https://github.com/epeschard/Cocktails/actions/workflows/objective-c-xcode.yml/badge.svg)
+![b&a develop](https://github.com/epeschard/Cocktails/actions/workflows/objective-c-xcode.yml/badge.svg?branch=develop)
+![b&a push](https://github.com/epeschard/Cocktails/actions/workflows/objective-c-xcode.yml/badge.svg?event=push)
 
 This repo contains the full source code for *Cocktails*, an iOS app to search cocktail recipes.
 <br>
