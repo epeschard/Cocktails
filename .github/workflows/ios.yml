@@ -24,3 +24,4 @@ jobs:
           -project Cocktails.xcodeproj \
           -scheme CocktailsTests \
           -destination 'platform=iOS Simulator,name=iPhone 12' \
+          -verbose
