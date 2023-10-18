@@ -7,7 +7,7 @@ import XCTest
 class SearchSnapshotTests: XCTestCase {
   
   @MainActor
-  func testSearchDrinksVC_Loaded() {
+  func testSearchDrinksVC_Loaded3() {
     let mainQueue = DispatchQueue.test
     
     var drinks: IdentifiedArrayOf<Drink> = []
@@ -58,11 +58,26 @@ class SearchSnapshotTests: XCTestCase {
       $0.mainQueue = mainQueue.eraseToAnyScheduler()
     }
     let rootVC = DrinksViewController(store: store)
-    let nav = UINavigationController(rootViewController: rootVC)
+    let navVC = UINavigationController(rootViewController: rootVC)
 
+    navVC.overrideUserInterfaceStyle = .light
     assertSnapshots(
-      of: nav,
-      as: ["3": .image(on: .iPhone13)]
+      of: navVC,
+      as: ["13ProMax_light": .image(on: .iPhone13ProMax)]
+    )
+    assertSnapshots(
+      of: navVC,
+      as: ["iPhoneSe_light": .image(on: .iPhoneSe)]
+    )
+    
+    navVC.overrideUserInterfaceStyle = .dark
+    assertSnapshots(
+      of: navVC,
+      as: ["13ProMax_dark": .image(on: .iPhone13ProMax)]
+    )
+    assertSnapshots(
+      of: navVC,
+      as: ["iPhoneSe_dark": .image(on: .iPhoneSe)]
     )
   }
   
@@ -84,9 +99,27 @@ class SearchSnapshotTests: XCTestCase {
       $0.mainQueue = mainQueue.eraseToAnyScheduler()
     }
     let rootVC = DrinksViewController(store: store)
-    let nav = UINavigationController(rootViewController: rootVC)
+    let navVC = UINavigationController(rootViewController: rootVC)
 
-    assertSnapshots(of: nav, as: ["Data": .image(on: .iPhone13)])
+    navVC.overrideUserInterfaceStyle = .light
+    assertSnapshots(
+      of: navVC,
+      as: ["13ProMax_light": .image(on: .iPhone13ProMax)]
+    )
+    assertSnapshots(
+      of: navVC,
+      as: ["iPhoneSe_light": .image(on: .iPhoneSe)]
+    )
+    
+    navVC.overrideUserInterfaceStyle = .dark
+    assertSnapshots(
+      of: navVC,
+      as: ["13ProMax_dark": .image(on: .iPhone13ProMax)]
+    )
+    assertSnapshots(
+      of: navVC,
+      as: ["iPhoneSe_dark": .image(on: .iPhoneSe)]
+    )
   }
   
   func testSearchDrinksVC_Loading() {
@@ -106,8 +139,26 @@ class SearchSnapshotTests: XCTestCase {
       $0.mainQueue = mainQueue.eraseToAnyScheduler()
     }
     let rootVC = DrinksViewController(store: store)
-    let nav = UINavigationController(rootViewController: rootVC)
+    let navVC = UINavigationController(rootViewController: rootVC)
 
-    assertSnapshots(of: nav, as: ["Empty": .image(on: .iPhone13)])
+    navVC.overrideUserInterfaceStyle = .light
+    assertSnapshots(
+      of: navVC,
+      as: ["13ProMax_light": .image(on: .iPhone13ProMax)]
+    )
+    assertSnapshots(
+      of: navVC,
+      as: ["iPhoneSe_light": .image(on: .iPhoneSe)]
+    )
+    
+    navVC.overrideUserInterfaceStyle = .dark
+    assertSnapshots(
+      of: navVC,
+      as: ["13ProMax_dark": .image(on: .iPhone13ProMax)]
+    )
+    assertSnapshots(
+      of: navVC,
+      as: ["iPhoneSe_dark": .image(on: .iPhoneSe)]
+    )
   }
 }
