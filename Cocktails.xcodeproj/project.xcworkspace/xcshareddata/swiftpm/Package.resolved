@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SDWebImage/SDWebImage.git",
       "state" : {
-        "revision" : "936f1c7067728d16c362ba4fb93c17df78b5fd79",
-        "version" : "5.18.2"
+        "revision" : "1f06ef5007b6a580b3873ed2adee19e05d3b215a",
+        "version" : "5.18.3"
       }
     },
     {
@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections",
       "state" : {
-        "revision" : "937e904258d22af6e447a0b72c0bc67583ef64a2",
-        "version" : "1.0.4"
+        "revision" : "a902f1823a7ff3c9ab2fba0f992396b948eda307",
+        "version" : "1.0.5"
       }
     },
     {
@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-snapshot-testing.git",
       "state" : {
-        "revision" : "506b6052384d8e97a4bb16fe8680325351c23c64",
-        "version" : "1.14.0"
+        "revision" : "bb0ea08db8e73324fe6c3727f755ca41a23ff2f4",
+        "version" : "1.14.2"
       }
     },
     {

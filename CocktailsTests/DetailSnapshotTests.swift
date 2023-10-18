@@ -31,9 +31,27 @@ class DetailSnapshotTests: XCTestCase {
     }
     
     let rootVC = DetailViewController(store: store)
-    let nav = UINavigationController(rootViewController: rootVC)
-
-    assertSnapshots(of: nav, as: ["iPhone13ProMax": .image(on: .iPhone13ProMax)])
+    let navVC = UINavigationController(rootViewController: rootVC)
+    
+    navVC.overrideUserInterfaceStyle = .light
+    assertSnapshots(
+      of: navVC,
+      as: ["13ProMax_light": .image(on: .iPhone13ProMax)]
+    )
+    assertSnapshots(
+      of: navVC,
+      as: ["iPhoneSe_light": .image(on: .iPhoneSe)]
+    )
+    
+    navVC.overrideUserInterfaceStyle = .dark
+    assertSnapshots(
+      of: navVC,
+      as: ["13ProMax_dark": .image(on: .iPhone13ProMax)]
+    )
+    assertSnapshots(
+      of: navVC,
+      as: ["iPhoneSe_dark": .image(on: .iPhoneSe)]
+    )
   }
   
   func testDetailViewController_withVideoURL() {
@@ -62,9 +80,27 @@ class DetailSnapshotTests: XCTestCase {
     }
     
     let rootVC = DetailViewController(store: store)
-    let nav = UINavigationController(rootViewController: rootVC)
+    let navVC = UINavigationController(rootViewController: rootVC)
 
-    assertSnapshots(of: nav, as: ["iPhone13ProMax": .image(on: .iPhone13ProMax)])
+    navVC.overrideUserInterfaceStyle = .light
+    assertSnapshots(
+      of: navVC,
+      as: ["13ProMax_light": .image(on: .iPhone13ProMax)]
+    )
+    assertSnapshots(
+      of: navVC,
+      as: ["iPhoneSe_light": .image(on: .iPhoneSe)]
+    )
+    
+    navVC.overrideUserInterfaceStyle = .dark
+    assertSnapshots(
+      of: navVC,
+      as: ["13ProMax_dark": .image(on: .iPhone13ProMax)]
+    )
+    assertSnapshots(
+      of: navVC,
+      as: ["iPhoneSe_dark": .image(on: .iPhoneSe)]
+    )
   }
 }
 
