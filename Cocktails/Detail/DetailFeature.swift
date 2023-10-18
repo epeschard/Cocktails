@@ -13,7 +13,6 @@ struct DetailFeature: Reducer {
     case videoButtonTapped
   }
   
-//  @Dependency(\.urlSession) var urlSession
   @Dependency(\.openURL) var openURL
   
   var body: some ReducerOf<Self> {
@@ -44,40 +43,4 @@ struct DetailFeature: Reducer {
       }
     }
   }
-  /*
-  func reduce(
-    into state: inout State,
-    action: Action
-  ) -> Effect<Action> {
-    switch action {
-    case .imageButtonTapped:
-      guard
-        let stringURL = state.drink.imageURL,
-        let imageURL = URL(string: stringURL)
-      else {
-        return .none
-      }
-/*
-      return .run { [imageURL = imageURL] send in
-        send(_ = openURL(imageURL))
-      }
-      .eraseToAnyPublisher()
-*/
-      UIApplication.shared.open(imageURL)
-      let _ = openURL.callAsFunction(imageURL)
-      return E
-      //return .none
-      
-    case .videoButtonTapped:
-      guard
-        let stringURL = state.drink.videoURL,
-        let videoURL = URL(string: stringURL)
-      else {
-        return .none
-      }
-      UIApplication.shared.open(videoURL)
-      return .none
-    }
-  }
-   */
 }

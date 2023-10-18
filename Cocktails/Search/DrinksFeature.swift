@@ -101,6 +101,6 @@ struct DrinksFeature: Reducer {
        action: /Action.showDetail) {
          DetailFeature()
        }
-//    ._printChanges()
+    ._printChanges()
   }
 }
